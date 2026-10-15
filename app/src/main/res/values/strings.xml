@@ -380,4 +380,21 @@
     <string name="percent_calc_from">From</string>
     <string name="percent_calc_to">to</string>
     <string name="percent_result">Result: %s</string>
+
+    <!-- Dice & Coin -->
+    <string name="tool_dice">Dice &amp; Coin</string>
+    <string name="tool_dice_summary">Roll polyhedral dice (d4–d100) or flip a coin with flip statistics.</string>
+    <string name="dice_tab_dice">Dice</string>
+    <string name="dice_tab_coin">Coin</string>
+    <string name="dice_action_roll">Roll</string>
+    <string name="dice_action_flip">Flip coin</string>
+    <string name="dice_action_reset">Reset</string>
+    <string name="dice_type_label">Die type</string>
+    <string name="dice_count_label">Number of dice</string>
+    <string name="dice_total_label">Total</string>
+    <string name="dice_history_label">Recent rolls</string>
+    <string name="coin_heads">Heads</string>
+    <string name="coin_tails">Tails</string>
+    <string name="coin_stats">Heads: %1$d · Tails: %2$d (%3$d total)</string>
+    <string name="coin_ready">Tap Flip to toss</string>
 </resources>
