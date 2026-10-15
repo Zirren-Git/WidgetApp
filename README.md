@@ -8,7 +8,7 @@ Like KWGT, without the formulas, the layer tree or the guesswork about sizing.
 ![Morning Paper and Up Next widgets in Paper (day) and Darkroom (night) themes](docs/images/widgets-mockup.png)
 <sub>Design mock-up drawn with the app's own fonts, colours and icons. On a phone, your launcher draws the real widgets.</sub>
 
-> **Status: first build, not yet tested on a real phone.** Every push is built by GitHub Actions: 87 unit tests, Android lint (0 warnings) and a debug APK, which you can download from the latest [Build run](https://github.com/Zirren-Git/WidgetApp/actions/workflows/build.yml) as `tessera-debug-apk`. The widget editor comes next. The full plan is in [`docs/PRODUCT_SPEC.md`](docs/PRODUCT_SPEC.md).
+> **Status: first preview, not yet tested on many phones.** Download it from [Releases](https://github.com/Zirren-Git/WidgetApp/releases). Every push is built by GitHub Actions: 87 unit tests, Android lint (0 warnings) and a debug APK. The widget editor comes next. The full plan is in [`docs/PRODUCT_SPEC.md`](docs/PRODUCT_SPEC.md).
 
 ## What's in this build
 
@@ -18,6 +18,14 @@ Like KWGT, without the formulas, the layer tree or the guesswork about sizing.
 - **Calendar without fuss:** choose which calendars to show, hide declined events, merge duplicates, or show "Busy" instead of titles.
 - **Health check** that answers "why isn't my widget updating?" and offers one-tap fixes.
 - **Paper** (day) and **Darkroom** (night) themes, or your wallpaper's colours on Android 12+.
+
+## Install
+
+1. On your phone (Android 8.0 or newer), open [Releases](https://github.com/Zirren-Git/WidgetApp/releases) and download the newest `tessera-….apk`.
+2. Open the file. If Android asks, allow your browser or file manager to install apps.
+3. Open Tessera, tap **Add to home screen** on Morning Paper, then choose a place under **Weather**.
+
+Releases marked **Pre-release** are previews: debug-signed and installed as a separate app (`com.zirren.tessera.debug`). Uninstall a preview before installing the next one. From 1.0, releases are signed with Tessera's own key and update in place.
 
 ## Build it
 
@@ -43,9 +51,11 @@ The `core` modules are plain Kotlin with no Android dependencies, so their tests
 
 Weather data from [MET Norway](https://api.met.no/) (CC BY 4.0). Place search from GeoNames via [Open-Meteo](https://open-meteo.com/) (CC BY 4.0). Fonts: Fraunces, Instrument Sans and IBM Plex Mono (SIL OFL 1.1; licences in `app/src/main/assets/licenses`).
 
-## Distribution
+## Releasing
 
-Tessera is released only on [GitHub Releases](https://github.com/Zirren-Git/WidgetApp/releases), as a signed APK.
+Tessera is distributed only through [GitHub Releases](https://github.com/Zirren-Git/WidgetApp/releases). Publishing a release (tag `vX.Y.Z`) runs [`.github/workflows/release.yml`](.github/workflows/release.yml): it runs the tests, builds the APK from that tag and attaches it with `SHA256SUMS.txt`.
+
+For properly signed releases, add these repository secrets (Settings → Secrets and variables → Actions): `TESSERA_KEYSTORE_BASE64` (the keystore file, base64-encoded), `TESSERA_KEYSTORE_PASSWORD`, `TESSERA_KEY_ALIAS` and `TESSERA_KEY_PASSWORD`. Until then, releases are debug-signed previews. Keep an offline backup of the keystore: updates depend on it forever.
 
 ## License
 

@@ -450,7 +450,8 @@ The three modules marked *plain Kotlin* have no Android dependencies on purpose,
 
 ## 11. Distribution
 
-- **GitHub Releases only.** A tagged commit triggers GitHub Actions to build, test and sign the APK (keystore in Actions secrets), then attach it to the release with a SHA-256 checksum. File names follow `tessera-v0.1.0.apk` so tools like Obtainium can track releases.
+- **GitHub Releases only (built).** Publishing a release runs `.github/workflows/release.yml`, which tests, builds the APK from the release's tag, and attaches it with `SHA256SUMS.txt`. File names follow `tessera-0.1.0.apk` so tools like Obtainium can track releases.
+- **Previews until there's a release key.** The signing key lives only in Actions secrets (`TESSERA_KEYSTORE_BASE64`, `TESSERA_KEYSTORE_PASSWORD`, `TESSERA_KEY_ALIAS`, `TESSERA_KEY_PASSWORD`), added by the owner. Without it, the workflow publishes a debug-signed preview: package `com.zirren.tessera.debug`, a fresh key per build, so each preview is uninstalled before the next. Previews never collide with signed releases.
 - **Beginner install guide** in the README, illustrated: download → allow your browser to install apps → open.
 - **Update check:** opt-in and off by default. It asks GitHub's releases API whether a newer version exists.
 - **The signing key must never be lost or changed.** Updates and developer registration both depend on it.

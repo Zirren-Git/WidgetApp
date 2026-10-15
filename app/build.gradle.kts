@@ -4,6 +4,10 @@ plugins {
     alias(libs.plugins.kotlin.compose)
 }
 
+// Release signing comes only from the environment (set by .github/workflows/release.yml
+// from repository secrets). The key never lives in the repository.
+val releaseKeystore: String? = providers.environmentVariable("TESSERA_KEYSTORE_PATH").orNull
+
 android {
     namespace = "com.zirren.tessera"
     compileSdk = 37
@@ -17,6 +21,17 @@ android {
         versionName = "0.1.0"
     }
 
+    signingConfigs {
+        if (releaseKeystore != null) {
+            create("release") {
+                storeFile = file(releaseKeystore)
+                storePassword = providers.environmentVariable("TESSERA_KEYSTORE_PASSWORD").get()
+                keyAlias = providers.environmentVariable("TESSERA_KEY_ALIAS").get()
+                keyPassword = providers.environmentVariable("TESSERA_KEY_PASSWORD").get()
+            }
+        }
+    }
+
     buildTypes {
         debug {
             applicationIdSuffix = ".debug"
@@ -26,6 +41,7 @@ android {
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            if (releaseKeystore != null) signingConfig = signingConfigs.getByName("release")
         }
     }
 
