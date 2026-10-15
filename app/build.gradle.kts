@@ -39,9 +39,8 @@ android {
     }
 
     lint {
-        // Print the full report into the build log (CI shows it without downloading artifacts).
+        // Also write build/reports/lint-results-debug.txt, which CI prints into its log.
         textReport = true
-        textOutput = file("stdout")
     }
 }
 
