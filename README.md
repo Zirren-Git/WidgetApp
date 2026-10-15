@@ -8,7 +8,7 @@ Like KWGT, without the formulas, the layer tree or the guesswork about sizing.
 ![Morning Paper and Up Next widgets in Paper (day) and Darkroom (night) themes](docs/images/widgets-mockup.png)
 <sub>Design mock-up drawn with the app's own fonts, colours and icons. On a phone, your launcher draws the real widgets.</sub>
 
-> **Status: first build, not yet run on a device.** Weather, calendar and the first two widgets are written and checked as far as possible without Android Studio (87 unit tests; Android code compile-checked against SDK 37). The widget editor comes next. The full plan is in [`docs/PRODUCT_SPEC.md`](docs/PRODUCT_SPEC.md).
+> **Status: first build, not yet tested on a real phone.** Every push is built by GitHub Actions: 87 unit tests, Android lint (0 warnings) and a debug APK, which you can download from the latest [Build run](https://github.com/Zirren-Git/WidgetApp/actions/workflows/build.yml) as `tessera-debug-apk`. The widget editor comes next. The full plan is in [`docs/PRODUCT_SPEC.md`](docs/PRODUCT_SPEC.md).
 
 ## What's in this build
 

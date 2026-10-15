@@ -508,16 +508,17 @@ Each milestone ends with an APK you can install. Decision 14 pulled weather and 
 
 ### 13.3 What can be verified where
 
-This sandbox can't run Gradle (Google's Maven and Gradle servers are unreachable), so the first full build happens in Android Studio. Short of that, everything that can be checked here was checked:
+This sandbox can't run Gradle (Google's Maven and Gradle servers are unreachable). The real build therefore runs on GitHub Actions on every push, and everything else was checked here:
 
 | Check | Result |
 |---|---|
+| **Full Gradle build on GitHub Actions** (AGP 9.4.1, Kotlin 2.4.21, Gradle 9.6.1): core tests, `lintDebug`, `assembleDebug` | **Passes.** All code, including the Compose UI, compiles; lint reports 0 errors and 0 warnings (2 hints, both documented in `app/lint.xml`); a debug APK is built and attached to each run |
 | `:core:*` unit tests (JUnit 4 sources, run with a stand-in harness) | 87/87 pass; deliberately broken code makes the right tests fail |
 | `:core:*` compiled against **Android 8.0's** `android.jar` with no JDK | Passes: no Java API newer than minSdk 26 |
 | Android framework code (data, sync, widgets) compiled against `android-37.jar` with an `R` class generated from the real resources | Passes, no warnings |
 | Same code against Android 8.0 | Only four newer APIs show up, each behind an `SDK_INT` check |
 | Resource references, RemoteViews-allowed views, string formats, style parents | Pass |
-| **Compose UI** (`ui/`) | **Not compiled here** (needs AndroidX). Written against stable APIs; Android Studio is the first real check |
+| **Compose UI** (`ui/`) | Can't be compiled in this sandbox (needs AndroidX); compiled and linted by CI instead |
 | Real devices and launchers | Not yet: M7's device matrix |
 
 Known gaps: weather condition labels ("Light rain") are English-only for now (the symbol's `labelKey` is the hook for translations). Widget fonts in third-party launchers still need on-device testing (§13.1).
