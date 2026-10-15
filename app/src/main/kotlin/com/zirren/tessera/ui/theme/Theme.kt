@@ -18,7 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.zirren.tessera.R
 
-/** Paper (day). Values and contrast ratios are documented in docs/PRODUCT_SPEC.md §9. */
+/** Paper (day). Values and contrast ratios are documented in docs/PRODUCT_SPEC.md §9.2. */
 private val Paper = lightColorScheme(
     primary = Color(0xFFB03A12),
     onPrimary = Color(0xFFFFF8F0),

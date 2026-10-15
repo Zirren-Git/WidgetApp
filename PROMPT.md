@@ -2,7 +2,7 @@
 
 You are a senior Android engineer and product designer continuing work on **Tessera**, an open-source Android app in this repository (`Zirren-Git/WidgetApp`). This file tells you what to build, which rules you must never break, how the code is organized, and how to prove your work is correct. Read all of it before you change anything.
 
-**Precedence:** the owner's newest instructions → this file → [`docs/PRODUCT_SPEC.md`](docs/PRODUCT_SPEC.md) → comments in code. The spec was written before decisions 15–18 (§2). Where they disagree, this file wins, and your first task is to update the spec (§14).
+**Precedence:** the owner's newest instructions → this file → [`docs/PRODUCT_SPEC.md`](docs/PRODUCT_SPEC.md) → comments in code. The spec records all 18 decisions (§2) and was brought in line with this file on 2026-10-15. If you find a disagreement, this file wins; fix the spec in the same change.
 
 **When something isn't covered:** pick the option that best fits the rules in §3 and record it in the spec's decision log. Ask the owner only about choices that are hard to undo: signing keys, package names, new permissions, new network use, or anything that bends a rule in §3.
 
@@ -224,7 +224,7 @@ Orange, amber, green and teal fall below 4.5:1 on white, so **never use them for
 
 ### 6.2 Paper and Darkroom (optional theme)
 
-Keep the existing palette and fonts exactly as they are (spec §9; `ui/theme/Theme.kt`, `res/values*/colors.xml`). Implement theming so that either theme drives the whole app and all widgets.
+Keep the existing palette and fonts exactly as they are (spec §9.2; `ui/theme/Theme.kt`, `res/values*/colors.xml`). Implement theming so that either theme drives the whole app and all widgets.
 
 The Material You switch (Android 12+) applies dynamic colors to whichever theme is chosen, while that theme's shapes and fonts stay.
 
@@ -385,7 +385,7 @@ Alternate between planner phases and designer milestones so both tabs keep movin
 
 ### P1: Lilac, tabs and the planner core (do this first)
 
-1. Record decisions 15–18 in spec §1 and update §4, §9, §10 and §12 to match this file (a docs-only commit).
+1. **Done (2026-10-15):** decisions 15–18 are in spec §1, and spec §3–§7, §9, §10, §12 and §13 match this file. Keep them in sync as you build.
 2. Build the theme system (§6.3): Lilac by default, Paper/Darkroom selectable, the Material You switch still working, Plus Jakarta Sans bundled.
 3. Build the navigation shell: the bottom pill with My Day and Widgets, and the "+" button. Today's Home screen becomes the Widgets tab, unchanged in behavior. Weather, Calendar settings, Forecast and Health stay reachable.
 4. Add Room, `core/planner` and backup v1, with export and import screens under Settings.
@@ -546,5 +546,4 @@ Follow the patterns in `app/src/main/kotlin/com/zirren/tessera/widget/`:
 
 1. Read [`docs/PRODUCT_SPEC.md`](docs/PRODUCT_SPEC.md), [`README.md`](README.md) and the code in `core/` and `app/`.
 2. Run the build and test commands in §11, or push and read CI. Confirm 87 tests and a clean lint before you change anything.
-3. Commit decisions 15–18 into the spec (P1 step 1).
-4. Continue with P1 in order. After each step, push and confirm CI is green before starting the next.
+3. Continue with P1 from step 2, in order. After each step, push and confirm CI is green before starting the next.

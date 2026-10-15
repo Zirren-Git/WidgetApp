@@ -1,10 +1,10 @@
 # Tessera — product spec
 
-> A home-screen widget maker for Android that a complete beginner can use in two minutes.
+> A friendly daily planner and a home-screen widget maker for Android, both easy enough for a complete beginner.
 > Open source · any Android 8+ phone · no AI · no accounts · no ads.
 
-**Status:** building (2026-10-15). Project skeleton, weather and calendar data, and the first two widgets are in the repo; see §12.
-The 14 decisions in §1 are the owner's. Everything else is the engineering recommendation that follows from them, and can be changed.
+**Status:** building (2026-10-15). Project skeleton, weather and calendar data, and the first two widgets are in the repo; see §12. The planner (decisions 15–18) is specified in §4.9 and scheduled in §12, but not built yet.
+The 18 decisions in §1 are the owner's. Everything else is the engineering recommendation that follows from them, and can be changed.
 
 **Contents**
 1. [Decisions so far](#1-decisions-so-far)
@@ -15,7 +15,7 @@ The 14 decisions in §1 are the owner's. Everything else is the engineering reco
 6. [Key flows](#6-key-flows)
 7. [How widgets reach the home screen](#7-how-widgets-reach-the-home-screen)
 8. [The `.tessera` file format](#8-the-tessera-file-format)
-9. [How the editor looks](#9-how-the-editor-looks)
+9. [How the app looks](#9-how-the-app-looks)
 10. [Architecture](#10-architecture)
 11. [Distribution](#11-distribution)
 12. [Milestones](#12-milestones)
@@ -25,7 +25,7 @@ The 14 decisions in §1 are the owner's. Everything else is the engineering reco
 
 ## 1. Decisions so far
 
-Three rounds of questions plus one follow-up request, 15 Oct 2026.
+Three rounds of questions and a follow-up request, then a fourth round when the owner asked for Brite Daily Planner's features and look. All on 15 Oct 2026.
 
 | # | Question | Answer | What it means for the build |
 |---|---|---|---|
@@ -40,9 +40,13 @@ Three rounds of questions plus one follow-up request, 15 Oct 2026.
 | 9 | Colors and fonts across widgets | **Shared theme + wallpaper option** | One theme for every widget, optionally following the wallpaper. Each widget can opt out. |
 | 10 | Sharing | **File/QR sharing + KWGT import** | `.tessera` files via the share sheet, QR codes for small widgets, and a `.kwgt` importer that reports what it couldn't translate. No servers. |
 | 11 | Money | **"No paid features or donation page. Fully open source and only on GitHub."** | MIT license (already in the repo). No billing code and no donation links. APKs on GitHub Releases only: no Play Store, no F-Droid. See §11 on Google's developer verification. |
-| 12 | Editor look | **"Paper by day, darkroom by night and an option to switch to Material You"** | Two hand-tuned palettes that follow system dark mode, plus a "Use wallpaper colors" switch (Android 12+). |
+| 12 | Editor look | **"Paper by day, darkroom by night and an option to switch to Material You"** | Two hand-tuned palettes that follow system dark mode, plus a "Use wallpaper colors" switch (Android 12+). *Now the optional theme; see 18.* |
 | 13 | Name | **Tessera** | App label "Tessera", package `com.zirren.tessera`. Effectively permanent once people install it, because updates need the same package name and signing key. |
 | 14 | Follow-up request | **"Add the possibility for the widgets to fetch weather data and calendar (and other QoL features)"** | Calendar moves into v1 (it was a v1.1 candidate). Weather is specified in detail (§4.1, §7.3). New §4.8 lists the quality-of-life features. Both data sources are built first, ahead of the editor (§12). |
+| 15 | Follow-up request | **"It should have all the functions of Brite and look more similar to it"** (Brite = *Brite Daily Planner*, britetodo.com) | Tessera becomes a daily planner as well as a widget maker. §4.9 lists Brite's features, the phase that builds each one, and what our rules exclude. Brite is a reference, not a source: no names, logos, icons, illustrations, copy, habit names or quotes are copied. |
+| 16 | What Tessera becomes | **Both: planner and widget maker** | Two equal tabs in a floating bottom bar: *My Day* (the planner and the start screen) and *Widgets* (today's Home screen, later the designer). Every planner card can also go on the home screen as a widget. |
+| 17 | Brite's AI, accounts and sync vs. our rules | **Keep the rules** | No AI assistant, accounts, cloud sync or collaboration. Quick add ("call mom tomorrow 5pm") uses an offline parser, and backup and restore is a file the user exports. Confirms rule 6 (§3). |
+| 18 | Look | **Brite-style by default, Paper/Darkroom as an option** | New default theme **Lilac** (§9.1): lavender background, white rounded cards, one purple accent and colorful category icons. Paper/Darkroom (decision 12) stays as an optional theme, and the Material You switch works with both. Lilac knowingly departs from the human-ui-craft "one accent, no purple" rule; Paper/Darkroom keeps it. |
 
 ---
 
@@ -54,6 +58,8 @@ Complete beginners: someone who saw a beautiful home screen online, installed KW
 
 **They never want to see:** formulas, layer trees, `scale: 137`, anchors and padding math, weather API keys, or a blank canvas as the first screen.
 
+**The planner (decisions 15–16) is for the same people.** They want one calm place for today's tasks, habits and plans that looks finished without any setup, and they never meet a sign-up wall, a subscription screen or an AI assistant.
+
 ---
 
 ## 3. Rules we build by
@@ -62,13 +68,18 @@ Complete beginners: someone who saw a beautiful home screen online, installed KW
 2. **It fits, every time.** Layout uses stacks and dp units. There is no scale field, and the editor previews every common widget size before you place it. (Sizing is KWGT's most common complaint.)
 3. **Clocks are never wrong.** Anything that ticks is drawn by the launcher itself, so it doesn't depend on our app staying alive.
 4. **Any Android phone.** Android 8.0+, any brand, no Google Play services. If a library needs them, we don't use it.
-5. **Made by people, not generated.** No AI features or AI APIs. Templates are designed by people.
-6. **Nothing phones home.** No accounts, analytics, ads or crash-reporting SDKs. The network is used only for weather, city search (when you type), and an opt-in update check. *(This is an inference from answers 8 and 11. Confirm if you want it stricter or looser.)*
+5. **Made by people, not generated.** No AI features, models or AI APIs. That includes on-device language models, OCR, in-app speech-to-text and "smart suggestions". Quick add is a deterministic parser (decision 17). Templates, habit presets and quotes are chosen by people.
+6. **Nothing phones home.** No accounts, analytics, ads or crash-reporting SDKs. The network is used only for weather, city search (when you type), and an opt-in update check. Any other network use needs the owner's approval first. *(Confirmed by decision 17.)*
 7. **Beautiful untouched.** Every template and default looks finished before the user changes anything.
+8. **Private by default.** Data lives in app storage and leaves the phone only in a backup file the user exports. Health data (mood, pills, period, body) never leaves it any other way.
+9. **Just-in-time permissions.** A permission is asked for only when a feature needs it, with one plain sentence saying why. Every feature still works, in a reduced form, if the answer is no.
+10. **Accessible.** WCAG AA text contrast in every theme, TalkBack labels on every control, 48 dp touch targets, and layouts that survive 200% font scale.
 
 ---
 
 ## 4. What's in v1
+
+§4.1–§4.7 describe the widget designer, §4.8 the quality-of-life features, and §4.9 the planner (*My Day*).
 
 ### 4.1 Content blocks
 
@@ -83,8 +94,8 @@ Complete beginners: someone who saw a beautiful home screen online, installed KW
 | Photo | One photo or a slideshow | none (system photo picker) | The slideshow flips natively (`ViewFlipper`), so the app never wakes |
 | Countdown | "62 days until Midsummer" | none | Daily at midnight. Under 24 h, a native `Chronometer` counts down |
 | Quote | Quote of the day + author: a bundled public-domain set plus your own | none | Daily |
-| To-do | Short checklist you can tick on the home screen | none | On tap |
-| Habit | Streak + last-4-weeks grid; tap marks today done | none | On tap and at midnight |
+| To-do | Short checklist you can tick on the home screen, from the planner's tasks (§4.9) | none | On tap |
+| Habit | Streak + last-4-weeks grid; tap marks today done. The same habits as the planner (§4.9) | none | On tap and at midnight |
 
 Design pieces: **Text, Shape** (rectangle, circle, pill, squircle), **Icon, Image, Progress** (bar or ring), **Spacer, Stack** (row, column, overlay).
 
@@ -213,7 +224,88 @@ Beginners judge an app by what happens when something goes slightly wrong, so th
 | Day/night widget colours follow the phone automatically | Matches the system without settings | Built |
 | Undo and version history in the editor | Fearless editing | Planned (M1) |
 | Contrast warning when text is hard to read on your wallpaper | Beginners don't know WCAG | Planned (M4) |
-| Backup and restore of all widgets to one file | New phone, same home screen | Planned (M5) |
+| Backup and restore to one file: planner data and settings first, widgets with M5 | New phone, same planner and home screen. Replaces cloud sync (decision 17) | Planned (P1, M5) |
+
+### 4.9 My Day: the planner
+
+Decisions 15–18. Modelled on Brite Daily Planner's features and structure; everything is written and drawn by us.
+
+**Screens**
+
+- **Bottom bar:** a floating rounded pill with two tabs, *My Day* and *Widgets*, plus a round **+** button for quick add on My Day.
+- **My Day** (the start screen): avatar, "My Day" and settings at the top. Below them:
+  - a week strip in the phone's week order, with the selected day as a tall accent pill and dots on days that have items;
+  - a summary card: "Your mood: Good", "3 tasks to complete" with a progress bar, and the **Day ring**;
+  - Morning / Day / Evening segments (05–12, 12–18, 18–05), opening on the current one;
+  - the user's cards, in their order.
+- **Cards:** Tasks · Habits · Calendar · Weather · Pomodoro · Daily quote · Notes, later Mood, Goals, Water, Budget, Journal and more. Edit mode opens a gallery grouped as *Plan · Practices · Wellbeing · Health · Money*: customize a card's name, color and icon, then *Add to My Day*. Cards can be dragged to reorder and removed (they stay in the gallery). A card's title opens its full screen.
+- **Calendar screen:** Month · Week · Day · Schedule, with a red "now" line and colored event blocks.
+- **Settings:** Appearance (Lilac or Paper & Darkroom, wallpaper colors, text size) · Notifications · Backup & restore · Licenses · About.
+- **First run:** "What should Tessera help you with?" (tasks, habits, calendar, focus, notes, mood, money, health). The answers pre-fill My Day with matching cards, and an optional first name personalizes the greeting ("Good morning, Sara").
+
+**Day ring.** A donut with 2–3 colored segments and a number in the middle. Tapping it explains the number: "4 of 6 tasks, 2 of 3 habits, mood logged". It is never an unexplained score.
+
+**Quick add.** Typing "call mom tomorrow 5pm #family" shows what was understood as removable chips (*Tomorrow · 17:00 · #family*) before saving. The parser is deterministic and offline, English first. It understands dates, times, repeats ("every weekday"), durations, `#tags`, `!` for important and `@list`. Removing a chip puts its words back into the title.
+
+**One source of truth.** The designer's To-do and Habit blocks (§4.1) read the planner's data, so there is one list of tasks and habits, not two.
+
+**Brite feature parity.** "All the functions of Brite" means every row below. Phases are defined in §12.
+
+| Brite feature | Tessera | Phase |
+|---|---|---|
+| My Day built from cards, a gallery, customizable name/color/icon, reorder and remove | Same | P1 |
+| Week strip, summary (mood, tasks to complete), "Energy" ring | Same; the ring is the explained **Day ring** | P1 |
+| Morning / Day / Evening routines | Segments; tasks and habits carry a part of day | P1 |
+| First-run interest quiz that pre-fills the main screen | Same | P1 |
+| Personal and work tasks, priorities and tags ("Important"), due times, repeats, check-off | Lists ("Spaces": Personal, Work…), tags, repeat rules | P1 |
+| Quick add in natural language | Offline parser, English first (*Quick add* above) | P1 |
+| Habit tracker with 80+ presets and streaks | ≥ 80 presets written by us, schedules, streaks, stats | P1 |
+| Calendar: day / week / month / schedule; Google, Apple and Outlook sync | Phone calendars via CalendarContract (Android syncs the accounts), plus local events | P1 (agenda and month), P2 (week, day, create events) |
+| Notes and docs, markdown editor, templates, daily note | Markdown-lite editor, templates, pin, tags | P1 |
+| Pomodoro / focus mode | 25/5 with a long break; configurable; stats | P1 |
+| Daily quotes / motivation, custom quotes | ≥ 365 public-domain quotes plus the user's own | P1 |
+| Weather | Existing MET Norway weather as a card | P1 |
+| Home-screen widgets: interactive tasks, calendar list/week/month, notes, Pomodoro | *Planner widgets* below | P1–P2 |
+| Mood diary with reasons and statistics | Same | P2 |
+| Goals tracker (daily, weekly, monthly, yearly; %) | Same | P2 |
+| Water tracker | Same, with a "+250 ml" widget | P2 |
+| Budget / expenses, categories, monthly budget | Same; amounts stored in minor units | P2 |
+| Journal, idea journal, photo journal, diary templates | Same; photos via the system photo picker | P2 |
+| Meditation / mental-health tools | Guided **breathing** timer (no audio content) | P2 |
+| Reminders | Notifications; exact time when the user allows "Alarms & reminders" | P2 |
+| Statistics (habits, mood, focus) | Same | P2 |
+| Fitness: programs, exercises, workout timer | Programs built from **free-exercise-db** (`yuhonas/free-exercise-db`, Unlicense) plus a timer and history | P3 |
+| Pills, period, fasting, body measurements | Same, local only | P3 |
+| Food diary | Manual entries; an offline food database only if the owner approves its size | P3 |
+| Projects: list, Kanban, Eisenhower matrix | Same | P4 |
+| Archive, search by tags | Same | P4 |
+| Export calendar to PDF / print | `PrintManager` / `PdfDocument` | P4 |
+| Shopping lists, sketches | Same | P4 |
+| Themes, accent colors, backgrounds, text size, app icon choice | Lilac / Paper, accent picker, My Day background photo, text size, icon variants via `activity-alias` | P1 (themes), P4 (the rest) |
+| Lock-screen widget | Keyguard widget category where the launcher supports it | P4 |
+
+**Excluded by our rules** (decision 17):
+- the AI assistant and AI suggestions;
+- accounts, sign-in and cloud sync;
+- collaboration, shared spaces, shared budgets and messaging;
+- photo OCR and in-app voice input (the keyboard's own voice typing still works);
+- Zoom and Meet integrations, apps for other platforms, and subscriptions.
+
+Backup and restore to a file replaces sync.
+
+**Planner widgets**
+
+| Widget | What it does | Phase |
+|---|---|---|
+| Tasks | Tick tasks on the home screen: native checkboxes on Android 12+, tap-to-toggle rows on older phones | P1 |
+| Habits | Tap to check today; shows the streak | P1 |
+| Pomodoro | Native `Chronometer` countdown with start, pause and stop | P1 |
+| Calendar: list, week, month | The list reuses the agenda engine; week and month grids redraw at midnight and when the calendar changes | P2 |
+| Water, mood, quote | One tap does the obvious thing: +250 ml, log a mood, open the quote | P2 |
+| Notes, budget | Glanceable summaries that open the full screen | P2 |
+| Lock screen | Keyguard widgets where the launcher supports them | P4 |
+
+Planner widgets use the native tier (§7.1) and the same theme as the app (§9.4).
 
 ---
 
@@ -221,13 +313,13 @@ Beginners judge an app by what happens when something goes slightly wrong, so th
 
 | Not in v1 | Why |
 |---|---|
-| AI features of any kind | Decision 8. Never. |
+| AI features of any kind, including Brite's AI assistant, photo OCR and in-app voice input | Decisions 8 and 17. Never. |
 | Paid features, donation page | Decision 11. Never. |
 | Google Play, F-Droid | Decision 11: GitHub only. |
-| Accounts, cloud sync, community gallery | Needs servers and moderation; file/QR sharing covers sharing. |
+| Accounts, cloud sync, collaboration, community gallery | Needs servers and moderation (decision 17). Backup files and file/QR sharing cover it. |
+| Zoom and Meet integrations, subscriptions | Brite has them; decisions 11 and 17 rule them out. |
 | Now-playing music, step count | Not picked for v1. Candidates for v1.1 (each needs a sensitive permission). Calendar moved into v1 with decision 14. |
 | Web/RSS feeds, Tasker, system stats, notification counts | Power-user features that would confuse beginners. Maybe later. |
-| Lock-screen widgets | v1.1 candidate (recent Pixel phones support them). |
 | iOS | Decision 1. |
 
 ---
@@ -235,7 +327,12 @@ Beginners judge an app by what happens when something goes slightly wrong, so th
 ## 6. Key flows
 
 **First run: under two minutes, no permission prompts**
-1. Open Tessera. The gallery shows templates rendered live with your real time and battery.
+1. Open Tessera. It asks "What should Tessera help you with?" and offers a few interests (tasks, habits, calendar, focus…), plus an optional first name.
+2. My Day opens already filled with matching cards, the week strip and the Day ring.
+3. Tap **+**, type "call mom tomorrow 5pm", and it lands under tomorrow at 17:00.
+
+**First widget**
+1. Open the **Widgets** tab. The gallery shows templates rendered live with your real time and battery.
 2. Tap *Morning Paper*. The editor opens with the widget preview at the top.
 3. Tap the clock. A bottom sheet shows *Font · Size · Color · When tapped*. Choosing a font updates the preview instantly.
 4. Tap **Add to home screen**. The system pin dialog appears (`requestPinAppWidget`) and the widget lands on the home screen.
@@ -247,6 +344,10 @@ Beginners judge an app by what happens when something goes slightly wrong, so th
 - **+** opens a visual block palette. Undo and redo are always on screen.
 - A size switcher (*Small 2×2 · Wide 4×2 · Large 4×4*) shows how the design adapts.
 - *Try it* simulates battery, time of day and weather to test rules.
+
+**Customizing My Day:** *Edit* → pick a card from the gallery → name, color and icon → *Add to My Day*. Drag cards to reorder them.
+
+**New phone:** Settings → Backup & restore → *Export* on the old phone, *Import* on the new one. A summary shows what will be restored before anything is replaced.
 
 **Sharing:** widget menu → *Share* → *As a file* or *As a QR code*.
 
@@ -287,8 +388,10 @@ Example: in **Polaroid**, the photo with rounded mask and grain is an image laye
 | Calendar | Content-change trigger on the calendar provider (fires seconds after an edit) | per change |
 | Event starts/ends, top of the hour, midnight | One-off "boundary" job at the next moment the widget would look different | per boundary |
 | Rules with time windows ("22:00–06:00") | The same boundary job | per boundary |
+| Planner widgets (tasks, habits, water…) | Redrawn right after a change in the app or a tap on the widget, and at midnight | per change |
+| Focus timer (Pomodoro) | Native `Chronometer` countdown | 0 while it runs |
 
-Everything runs through **JobScheduler**: no permanent foreground service and no exact-alarm permission. Jobs re-arm after reboot and app updates. The widget's own `updatePeriodMillis` (hourly) is only a safety net.
+Widget updates run through **JobScheduler**: no permanent foreground service. Jobs re-arm after reboot and app updates. The widget's own `updatePeriodMillis` (hourly) is only a safety net. Planner reminders (P2) and the end of a focus session use `AlarmManager` instead (§10.2): exact when the user allows *Alarms & reminders*, otherwise within a short window.
 
 ### 7.4 The fallback: minute refresh
 
@@ -339,11 +442,100 @@ One JSON document is shared by the editor, the renderer, sharing and import. Siz
 
 ---
 
-## 9. How the editor looks
+## 9. How the app looks
 
-This translates the attached *human-ui-craft* rules (written for web) into Android/Compose terms: a restrained palette, one accent, hairlines instead of shadows, and real copy.
+Tessera has two themes; the user picks one under Settings → Appearance.
 
-### 9.1 Palette
+- **Lilac** (default, decision 18): Brite-style. Soft lavender background, white rounded cards, one strong purple accent, colorful category icons, progress rings and gauges, a floating bottom pill and a round "+" button. Friendly, airy and tidy.
+- **Paper & Darkroom** (optional, decision 12): the original look. It translates the attached *human-ui-craft* rules (written for web) into Android/Compose terms: a restrained palette, one accent, hairlines instead of shadows, and real copy.
+
+Both follow the phone's dark mode and meet WCAG AA. The **Material You switch** (*Use wallpaper colors*, Android 12+) applies wallpaper colors to whichever theme is chosen, while that theme's shapes, typography and hairlines stay. Home-screen widgets follow the chosen theme too (§9.4).
+
+### 9.1 Lilac (default)
+
+**Core tokens.** Contrast is measured against WCAG 2.x; AA needs 4.5:1 for text.
+
+| Token | Light | Dark | Use |
+|---|---|---|---|
+| `background` | `#EEF0FA` | `#121320` | Screen background |
+| `card` | `#FFFFFF` | `#1C1E2E` | Cards, sheets |
+| `ink` | `#1E2039` (15.9:1 on card, 14.0:1 on background) | `#ECEDF7` (14.1:1, 15.8:1) | Primary text |
+| `muted` | `#5F6483` (5.8:1, 5.1:1) | `#A3A7C4` (7.0:1, 7.8:1) | Secondary text, input outlines |
+| `accent` | `#5B3FD6` (6.7:1 on card, 5.9:1 on background) | `#A391FF` (6.3:1, 7.1:1) | Selection, primary buttons, checkboxes, Pomodoro card |
+| `on-accent` | `#FFFFFF` (6.7:1) | `#170F33` (7.0:1) | Text on accent |
+| `hairline` | `#E2E4F0` | `#2E3047` | Dividers (decorative only) |
+| `ring-track` | `#E8EAF3` | `#2A2C40` | Empty part of rings and gauges |
+
+**Card tints** (light). Ink and muted text both pass AA on all of them:
+
+| Name | Color |
+|---|---|
+| blue | `#E8F0FF` |
+| peach | `#FFF2E5` |
+| lilac | `#EFEBFF` |
+| mint | `#E6F7EE` |
+| rose | `#FDEAF2` |
+| sand | `#FFF7DD` |
+| mist | `#F1F2F7` |
+
+In dark mode, derive tints at about 12% of the category color over `card`, and re-check contrast.
+
+**Category colors** are for icons, bars, rings and color dots only. They are at least 3:1 against white, as graphics need.
+
+| Category | Light | Dark |
+|---|---|---|
+| Orange | `#D9661F` | `#F59A5B` |
+| Blue | `#2F6FE4` | `#7AA7FF` |
+| Green | `#1E8A4C` | `#5CCB8A` |
+| Red | `#D63B3B` | `#F47C7C` |
+| Amber | `#B7791F` | `#F2C14E` |
+| Pink | `#C73A85` | `#F07EB8` |
+| Teal | `#0F8A80` | `#4FD1C5` |
+| Violet | `#5B3FD6` | `#A391FF` |
+
+Orange, amber, green and teal fall below 4.5:1 on white, so **never use them for text**. Text uses `ink`, `muted` or `accent`.
+
+**"Important" pill:** text `#A4470F` on `#FFE4CF` (5.0:1).
+
+**Shapes and elevation**
+
+| Element | Spec |
+|---|---|
+| Cards | 20 dp corners, no border; they stand off the lavender background by tone |
+| Chips | 12 dp corners |
+| Buttons | 14 dp corners |
+| Week-strip pill | Fully rounded |
+| "+" button | 56 dp circle |
+| Floating nav pill and "+" button | The **only** elements with a shadow: soft, low and short |
+
+**Type.** **Plus Jakarta Sans** (SIL OFL 1.1, from `tokotype/PlusJakartaSans`; Medium, Bold and ExtraBold, bundled with its license) replaces Instrument Sans in Lilac.
+
+| Role | Style |
+|---|---|
+| Screen title ("My Day") | 26–28 sp, Bold |
+| Card titles ("TASKS", "MORNING ROUTINES") | 13 sp, Bold, uppercase, +0.04 em tracking, with a colored icon to the left |
+| Body | 16 sp, line height 1.5 |
+| Numbers (Pomodoro "24:18", streak "42") | ExtraBold with tabular figures |
+
+**Components**
+
+- **Week strip:** day letters in `muted`. Today is underlined. The selected day is a vertical accent pill holding a white circle with the date.
+- **Day ring:** a donut with 2–3 colored segments and a centered number. Tapping it explains how the number is made: "4 of 6 tasks, 2 of 3 habits, mood logged". Never show an unexplained score.
+- **Habit gauge:** a 240° arc in a category color over `ring-track`, an icon in the middle, the name below, and a streak "🔥 27" shown after 3 days.
+- **Task row:** a circular checkbox in `accent`, then the title, an optional time (clock icon plus time in `accent`) and an optional "Important" pill. A done task gets a strikethrough, turns `muted`, and moves to "Completed".
+- **Pomodoro card:** `accent` background, a big `on-accent` time, a circular progress ring and a pause/play button.
+- **Quote card:** typographic, on a tint or `accent` background. Use photo backgrounds only with CC0 images whose sources are recorded.
+- **Card header:** icon, uppercase title, and an "+ Add" chip at the right that adds an item without leaving My Day.
+
+**Icons:** our own. For UI icons, use 24 dp line icons in the existing hand-drawn style: 1.6 stroke, round caps (see `app/src/main/res/drawable/ic_*`). For category and habit icons, use simple filled shapes in category colors. Mood faces are your own 5 vector faces, not emoji, so they look the same on every phone. Emoji are allowed only in copy for streaks (🔥).
+
+**Motion:**
+- Rings fill over about 600 ms with an ease-out.
+- A completed check strikes through, then fades.
+- Dragged cards lift gently.
+- Respect the system "remove animations" setting.
+
+### 9.2 Paper and Darkroom (optional)
 
 Contrast was measured against WCAG 2.x (AA needs 4.5:1 for normal text).
 
@@ -359,11 +551,7 @@ Contrast was measured against WCAG 2.x (AA needs 4.5:1 for normal text).
 
 The Darkroom accent is named for the red-orange safelight of a photo darkroom. Input outlines use `ink-muted`, not `hairline`, so form fields stay visible (WCAG 1.4.11).
 
-**Material You switch:** Settings → Appearance → *Use wallpaper colors* (Android 12+) swaps in the dynamic color scheme. Typography, hairlines and layout stay Tessera's.
-
-### 9.2 Type
-
-All three typefaces are SIL OFL and bundled; their licenses appear under Settings → Licenses.
+**Type.** All three typefaces are SIL OFL and bundled; their licenses appear under Settings → Licenses.
 
 | Role | Typeface | Details |
 |---|---|---|
@@ -371,19 +559,27 @@ All three typefaces are SIL OFL and bundled; their licenses appear under Setting
 | UI text | Instrument Sans | Line height 1.5 |
 | Labels and numbers | IBM Plex Mono | Uppercase micro-labels, +0.08 em tracking, tabular figures |
 
-### 9.3 Surfaces and layout
+**Surfaces**
 
 - No drop shadows. Depth comes from the `raised` tone plus a 1 px hairline.
 - One exception: the widget preview casts a single directional shadow (desk lamp at top-left), so it reads as an object on a table.
 - Paper mode has a faint paper grain (2–3% noise). Darkroom has none.
+
+### 9.3 Layout and details (both themes)
+
 - **Editor:** the preview sits on a "desk" in the top ~45% of the screen, with tools in a bottom sheet.
 - **Gallery:** asymmetric. One large featured template, then a denser list, not a grid of identical cards.
-
-### 9.4 Details
-
 - Pressed states are crisp, with no bounce. A haptic tick plays when a block snaps into a stack.
 - Widgets currently on the home screen show `● LIVE · updated 2 min ago` in mono, with a subtle pulse on the dot.
 - Empty states use real copy and a real action: *"Nothing on your home screen yet. Start with Morning Paper →"*
+
+### 9.4 How theming works
+
+- `Settings.themeStyle` is `LILAC` or `PAPER`, defaulting to `LILAC`.
+- `TesseraColors` (tints, category colors, ring track, pill colors) comes through a `CompositionLocal`, next to Material 3's `ColorScheme`. Composables never hardcode colors.
+- Home-screen widgets follow the theme:
+  - Android 12+: backgrounds via `setInt(id, "setBackgroundResource", res)` and text colors via `RemoteViews.setColorStateList(id, "setTextColor", colorRes)`, so the launcher resolves day and night itself.
+  - Android 8–11: colors are resolved for the current UI mode when the widget is drawn.
 
 ---
 
@@ -411,8 +607,11 @@ The packages inside `:app` (`data`, `sync`, `widget`, `ui`) will become the modu
 :app                  editor UI, navigation, settings
 :core:format          .tessera document model + JSON + migrations      (plain Kotlin)
 :core:logic           chip formatting + rule evaluation                (plain Kotlin)
-:core:data            time, battery, weather, photos, countdowns, quotes, to-dos, habits
+:core:data            time, battery, weather, photos, countdowns, quotes (to-dos and habits come from the planner)
 :core:theme           shared theme, wallpaper colors, font registry
+:core:planner         tasks, repeat rules, habits + streaks, Day ring, Pomodoro state machine,
+                      budget math, goal progress, mood statistics      (plain Kotlin)
+:core:quickadd        offline quick-add parser                         (plain Kotlin)
 :render:planner       chooses native / image / animated per element     (plain Kotlin)
 :render:native        RemoteViews builder + generated XML "cells"
 :render:image         bitmap renderer shared with the editor preview
@@ -422,27 +621,33 @@ The packages inside `:app` (`data`, `sync`, `widget`, `ui`) will become the modu
 :feature:kwgt-import  .kwgt parser + translator
 ```
 
-The three modules marked *plain Kotlin* have no Android dependencies on purpose, so they can be compiled and unit-tested anywhere.
+The modules marked *plain Kotlin* have no Android dependencies on purpose, so they can be compiled and unit-tested anywhere. Room (the planner's database) lives in `:app` at first, or in its own Android library module once `:app` gets crowded. Note the two planners: `:core:planner` is the day planner's logic, `:render:planner` the widget render planner (§7). They are unrelated.
 
 ### 10.2 Stack
 
 | Concern | Choice | Why |
 |---|---|---|
-| Language / UI | Kotlin 2.x, Jetpack Compose, Material 3 with custom color schemes | Modern, fast to iterate |
+| Language / UI | Kotlin 2.x, Jetpack Compose, Material 3 with custom color schemes (Lilac, Paper/Darkroom) | Modern, fast to iterate |
 | Native widget tier | Hand-built RemoteViews (built) | Full control over `TextClock`, `AnalogClock`, `Chronometer`, `ViewFlipper` and size-mapped layouts, some of which Glance doesn't expose |
 | Animated tier | Glance 1.3 alpha + `androidx.compose.remote` alpha | The only route to animated widgets; kept isolated |
 | Documents | kotlinx.serialization; one folder per widget in app storage | Same file as export |
-| To-dos, habits, countdowns | Room | Streak queries |
+| Planner data (tasks, habits, notes, mood, budget…) and countdowns | Room with the KSP processor (KSP 2.3.1 or newer for AGP 9's built-in Kotlin); repositories expose `Flow` | Streak and statistics queries; one source for the planner, its widgets and the designer's blocks |
+| Data conventions | `kotlin.uuid.Uuid` IDs, dates as epoch days, instants as epoch milliseconds, times of day as minutes, money as `Long` minor units plus an ISO currency code | Backups merge cleanly; no rounding errors in money |
+| Backup | One JSON file (`tessera/backup`, version 1) through the Storage Access Framework. Import validates, migrates and shows a summary first | Replaces cloud sync (decision 17) |
 | Settings | SharedPreferences (built) | Synchronous reads inside widget callbacks; a dozen keys don't need DataStore |
-| Background | JobScheduler (built) | No dependency, no exact-alarm permission, no permanent service. Content-change triggers watch the calendar directly; WorkManager would only wrap the same API |
+| Background | JobScheduler for widget refreshes (built). `AlarmManager` for reminders and the end of a focus session: `setExactAndAllowWhileIdle` when the user allows *Alarms & reminders* (`SCHEDULE_EXACT_ALARM`, never `USE_EXACT_ALARM`), otherwise `setWindow` | No dependency and no permanent service. Content-change triggers watch the calendar directly; WorkManager would only wrap the same API. Reminders re-arm after reboot, time changes and app updates |
+| Notifications | Channels "Reminders" and "Focus timer". `POST_NOTIFICATIONS` (Android 13+) is asked at the first reminder or focus session | Just-in-time (rule 9). The focus timer is an ongoing notification with a countdown chronometer, not a foreground service |
 | Weather | MET Norway Locationforecast 2.0 `complete` (built): free, no key, attribution shown in-app. City search via Open-Meteo Geocoding (free for non-commercial use) | "Just works" without the KWGT provider/API-key setup |
 | JSON | kotlinx.serialization JSON tree API | No compiler plugin needed; tolerant of fields MET adds later |
 | HTTP | `HttpURLConnection` | Works on Android and the JVM, so the weather client is testable without a device |
 | Location | Platform `LocationManager`, coarse, optional | No Google Play services |
-| Photos | System photo picker, falling back to the document picker | No storage permission; works without Google services |
+| Photos | System photo picker (`PickVisualMedia`), falling back to the document picker; a downscaled copy is kept in app storage | No storage permission; works without Google services |
+| Calendar writes | `WRITE_CALENDAR`, asked only when the user creates an event in a phone calendar. Without it, the event is saved as a local timed item | Rule 9 |
+| Fonts | Plus Jakarta Sans (Lilac); Fraunces, Instrument Sans and IBM Plex Mono (Paper/Darkroom). All SIL OFL | Bundled, so they work offline and in widgets; licenses under Settings → Licenses |
+| Exercise data (P3) | `yuhonas/free-exercise-db` (Unlicense), text first | Public domain and offline |
 | QR | ZXing + CameraX | ML Kit would need Google Play services |
 | Build | Gradle 9.6.1, AGP 9.4.1 (built-in Kotlin), Kotlin 2.4.21, Compose BOM 2026.09.00; minSdk 26, compileSdk 37, targetSdk 36; Java 17 bytecode | Versions checked against Google Maven / Maven Central on 2026-10-15 |
-| Tests | JVM unit tests (core, planner), Roborazzi screenshot tests of every template, instrumented widget tests on API 26 / 31 / 34 / 36 | |
+| Tests | JVM unit tests (core modules, including the day planner and at least 40 quick-add cases), Roborazzi screenshot tests of every template, instrumented widget tests on API 26 / 31 / 34 / 36 | |
 
 **Implementation note.** RemoteViews can only inflate layouts that already exist in the APK, and a TextView's font can't be changed remotely. So `:render:native` assembles each widget from small generic XML "cells" (frame, row, column, image, clock…). A Gradle task generates one text cell and one clock cell per bundled font.
 
@@ -473,6 +678,21 @@ Each milestone ends with an APK you can install. Decision 14 pulled weather and 
 
 **Still open in M0:** the `.tessera` file format and migrations.
 
+**Order of work.** Decisions 15–18 add the planner as phases **P1–P4**. They alternate with the designer milestones so both tabs keep moving:
+
+**P1 → W1 (M0 rest + M1) → P2 → W2 (M2–M3) → P3 → P4 → W3 (M4–M7, ending with v1.0)**
+
+Each phase and milestone ends with green CI, an installable APK and updated docs. Each planner phase is also published as a GitHub Release (a pre-release until the signing secrets exist).
+
+| # | Planner phase | Done when |
+|---|---|---|
+| P1 | **Lilac, tabs and the planner core:** the theme system (Lilac by default, Paper/Darkroom, Material You), the bottom pill with My Day and Widgets, Room, `core/planner`, backup v1, My Day with edit mode and first-run interests, the Tasks, Habits, Calendar (agenda and month), Weather, Pomodoro, Daily quote and Notes cards, quick add, and the Tasks, Habits and Pomodoro widgets | A new user picks interests and sees a finished My Day. "call mom tomorrow 5pm" lands under tomorrow at 17:00. Ticking a task on the widget updates My Day, and ticking a habit increments its streak. A focus session ends with a notification while the screen is off. A backup restores everything after the app's data is cleared |
+| P2 | **Wellbeing, money, deeper calendar:** mood diary and statistics, goals, water, budget and expenses, journal and photo journal, a breathing timer, reminders, statistics, calendar week/day/schedule views with event creation, and the calendar, notes, mood, quote, water and budget widgets | Every P2 row in §4.9 works |
+| P3 | **Health:** fitness programs and a workout timer, pills with reminders, a period tracker (local only, optional app lock), fasting and body measurements. Food diary scope needs the owner's approval | Every P3 row in §4.9 works |
+| P4 | **Organize and polish:** projects (list, Kanban, Eisenhower matrix), archive, tag search, PDF export, shopping lists, sketches, an accent picker, a My Day background photo, app icon variants and lock-screen widgets | Every P4 row in §4.9 works |
+
+The designer milestones:
+
 | # | Milestone | Done when |
 |---|---|---|
 | M0 | **Foundations:** Gradle project, modules, CI, `.tessera` v1 + migrations, theme tokens, Paper/Darkroom/Material You app shell | The app installs and shows the (static) gallery |
@@ -482,7 +702,7 @@ Each milestone ends with an APK you can install. Decision 14 pulled weather and 
 | M4 | **Themes:** shared theme, follow wallpaper, per-widget opt-out, curated fonts | One theme change restyles every widget |
 | M5 | **Sharing and KWGT import:** export/import, QR, `.kwgt` translator + report | A real KWGT preset imports with an honest report |
 | M6 | **Animated tier** (Android 16+, experimental switch) | Smooth resize and tap feedback on an Android 16 phone |
-| M7 | **Hardening and v1.0:** device matrix (Pixel, Samsung, Xiaomi, OnePlus, Motorola; Nova and Lawnchair launchers), TalkBack and font-scale pass, battery measurement, install guide | v1.0 published on GitHub Releases |
+| M7 | **Hardening and v1.0:** device matrix (Pixel, Samsung, Xiaomi, OnePlus, Motorola; Nova and Lawnchair launchers), TalkBack and font-scale pass across both tabs, battery measurement, install guide | v1.0 published on GitHub Releases |
 
 ---
 
@@ -499,13 +719,17 @@ Each milestone ends with an APK you can install. Decision 14 pulled weather and 
 | Beginners vs. GitHub-only sideloading | Register for developer verification (§11) and ship an illustrated install guide. |
 | The KWGT format is undocumented | Build the importer against a set of real presets, and report what didn't translate instead of guessing. |
 | Weather API terms | MET Norway: attribution shown in the forecast sheet and an identifying User-Agent. Open-Meteo is used only for city search, under its non-commercial terms (fits a no-revenue open-source app). |
+| Brite's feature set is very large | Vertical slices with acceptance criteria for each phase (§12). The parity table (§4.9) is the checklist, and every phase ships an installable pre-release. |
+| Looking too much like Brite (names, icons, copy) | Brite is a reference only (decision 15): our own names, icons, habit presets and copy, public-domain quotes, and third-party assets only with MIT-compatible licenses, recorded in `app/src/main/assets/licenses/`. |
+| Android 14+ no longer pre-grants exact alarms (`SCHEDULE_EXACT_ALARM`) to new installs | Reminders fall back to a short window, and the health check offers the *Alarms & reminders* setting. |
+| Health data is sensitive | Local only (rule 8), an optional app lock for the period tracker, and it leaves the phone only inside a backup file the user exports. |
 
-### 13.2 Open questions (none block M0)
+### 13.2 Open questions (none block P1)
 
 1. **Developer verification:** register (recommended) or rely on the advanced flow? Needed before the first public release.
-2. **Languages at launch:** English only, or English + Swedish? Strings are translation-ready either way.
+2. **Languages at launch:** English only, or English + Swedish? Strings are translation-ready either way, and the quick-add parser starts in English.
 3. **v1.1:** add now-playing music and steps, or keep permissions minimal? (Calendar is decided: it's in v1.)
-4. **Lock-screen widgets** in v1.1?
+4. **Food diary (P3):** manual entries only, or also an offline food database? A database adds APK size, so it needs the owner's approval. (Lock-screen widgets, an earlier question, are decided: Brite has them, so they're in P4.)
 
 ### 13.3 What can be verified where
 
