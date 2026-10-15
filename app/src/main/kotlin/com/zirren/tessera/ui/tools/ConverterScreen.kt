@@ -133,9 +133,10 @@ fun ConverterScreen(navigator: Navigator) {
     }
 
     val copiedToast = stringResource(R.string.calc_copied)
+    val toolTitle = stringResource(R.string.tool_converter)
     fun copyText(text: String) {
         val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager ?: return
-        clipboard.setPrimaryClip(ClipData.newPlainText(context.getString(R.string.tool_converter), text))
+        clipboard.setPrimaryClip(ClipData.newPlainText(toolTitle, text))
         Toast.makeText(context, copiedToast, Toast.LENGTH_SHORT).show()
     }
 

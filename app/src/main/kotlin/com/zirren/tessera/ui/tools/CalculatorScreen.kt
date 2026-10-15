@@ -79,10 +79,11 @@ fun CalculatorScreen(navigator: Navigator) {
 
     val copyCd = stringResource(R.string.calc_copy_cd)
     val copiedToast = stringResource(R.string.calc_copied)
+    val toolTitle = stringResource(R.string.tool_calculator)
     fun copyDisplay() {
         val textToCopy = state.copyText(numberStyle) ?: return
         val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager ?: return
-        clipboard.setPrimaryClip(ClipData.newPlainText(context.getString(R.string.tool_calculator), textToCopy))
+        clipboard.setPrimaryClip(ClipData.newPlainText(toolTitle, textToCopy))
         Toast.makeText(context, copiedToast, Toast.LENGTH_SHORT).show()
     }
 

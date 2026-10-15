@@ -34,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -59,6 +60,7 @@ import java.time.LocalDate
 @Composable
 fun DateCalcScreen(navigator: Navigator) {
     val context = LocalContext.current
+    val resources = LocalResources.current
     val haptic = LocalHapticFeedback.current
     val dateTimeText = remember { Texts.forContext(context, context.graph.settings).dateTime }
 
@@ -150,10 +152,11 @@ fun DateCalcScreen(navigator: Navigator) {
         item {
             Panel {
                 Column(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
+                    val daysCount = diff.totalDays.toInt()
                     val mainText = when {
                         diff.totalDays == 0L -> stringResource(R.string.dates_result_today)
-                        diff.isPast -> stringResource(R.string.dates_result_days_ago, diff.totalDays)
-                        else -> stringResource(R.string.dates_result_days_left, diff.totalDays)
+                        diff.isPast -> resources.getQuantityString(R.plurals.dates_result_days_ago, daysCount, diff.totalDays)
+                        else -> resources.getQuantityString(R.plurals.dates_result_days_left, daysCount, diff.totalDays)
                     }
 
                     Text(
@@ -165,8 +168,10 @@ fun DateCalcScreen(navigator: Navigator) {
                     )
 
                     if (diff.totalDays > 0L) {
+                        val weeksPart = resources.getQuantityString(R.plurals.dates_weeks, diff.weeks.toInt(), diff.weeks)
+                        val daysPart = resources.getQuantityString(R.plurals.dates_days, diff.remainderDays.toInt(), diff.remainderDays)
                         Text(
-                            text = stringResource(R.string.dates_weeks_days, diff.weeks, diff.remainderDays),
+                            text = "$weeksPart, $daysPart",
                             style = MaterialTheme.typography.titleMedium,
                             color = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier.padding(top = 4.dp),
@@ -185,12 +190,12 @@ fun DateCalcScreen(navigator: Navigator) {
             Panel {
                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                     BreakdownRow(
-                        label = stringResource(R.string.dates_business_days, diff.businessDays),
+                        label = resources.getQuantityString(R.plurals.dates_business_days, diff.businessDays.toInt(), diff.businessDays),
                         detail = "Monday–Friday",
                     )
                     Hairline()
                     BreakdownRow(
-                        label = stringResource(R.string.dates_weekend_days, diff.weekendDays),
+                        label = resources.getQuantityString(R.plurals.dates_weekend_days, diff.weekendDays.toInt(), diff.weekendDays),
                         detail = "Saturday & Sunday",
                     )
                     if (diff.years > 0 || diff.months > 0) {

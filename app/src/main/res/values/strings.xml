@@ -342,19 +342,12 @@
     <string name="dates_today">Today</string>
     <string name="dates_swap">Swap dates</string>
     <string name="dates_result_today">Same day</string>
-    <string name="dates_result_days">%d days</string>
-    <string name="dates_result_days_left">%d days left</string>
-    <string name="dates_result_days_ago">%d days ago</string>
-    <string name="dates_weeks_days">%1$d weeks, %2$d days</string>
-    <string name="dates_business_days">%d business days</string>
-    <string name="dates_weekend_days">%d weekend days</string>
     <string name="dates_breakdown">Breakdown</string>
     <string name="dates_quick_presets">Quick offsets</string>
     <string name="dates_preset_end_month">End of month</string>
     <string name="dates_preset_end_year">End of year</string>
     <string name="dates_preset_30d">+30 days</string>
     <string name="dates_preset_100d">+100 days</string>
-    <string name="dates_select_date">Select date</string>
 
     <!-- Tip & Split -->
     <string name="tool_tip">Tip &amp; Split</string>
@@ -364,7 +357,6 @@
     <string name="tip_bill_amount">Bill amount</string>
     <string name="tip_percent_label">Tip percentage</string>
     <string name="tip_split_label">Split between</string>
-    <string name="tip_people_count">%d people</string>
     <string name="tip_person_single">1 person</string>
     <string name="tip_round_up">Round up total</string>
     <string name="tip_round_up_detail">Rounds total bill to nearest whole currency unit.</string>
@@ -372,7 +364,6 @@
     <string name="tip_summary_total">Total bill</string>
     <string name="tip_summary_tip">Tip</string>
     <string name="percent_calc_heading_of">Percentage of a value</string>
-    <string name="percent_calc_what_is">What is</string>
     <string name="percent_calc_of">of</string>
     <string name="percent_calc_heading_ratio">Value as a percentage</string>
     <string name="percent_calc_is_what_percent_of">is what % of</string>
@@ -391,11 +382,10 @@
     <string name="dice_action_reset">Reset</string>
     <string name="dice_type_label">Die type</string>
     <string name="dice_count_label">Number of dice</string>
-    <string name="dice_total_label">Total</string>
     <string name="dice_history_label">Recent rolls</string>
     <string name="coin_heads">Heads</string>
     <string name="coin_tails">Tails</string>
-    <string name="coin_stats">Heads: %1$d · Tails: %2$d (%3$d total)</string>
+    <string name="coin_stats">Heads %1$d · Tails %2$d · Total %3$d</string>
     <string name="coin_ready">Tap Flip to toss</string>
 
     <!-- Tally Counter -->
@@ -405,5 +395,33 @@
     <string name="counter_action_reset">Reset count</string>
     <string name="counter_action_decrement">Subtract</string>
     <string name="counter_action_increment">Add</string>
-    <string name="counter_target_reached">Target reached!</string>
+
+    <plurals name="dates_result_days_left">
+        <item quantity="one">%d day left</item>
+        <item quantity="other">%d days left</item>
+    </plurals>
+    <plurals name="dates_result_days_ago">
+        <item quantity="one">%d day ago</item>
+        <item quantity="other">%d days ago</item>
+    </plurals>
+    <plurals name="dates_weeks">
+        <item quantity="one">%d week</item>
+        <item quantity="other">%d weeks</item>
+    </plurals>
+    <plurals name="dates_days">
+        <item quantity="one">%d day</item>
+        <item quantity="other">%d days</item>
+    </plurals>
+    <plurals name="dates_business_days">
+        <item quantity="one">%d business day</item>
+        <item quantity="other">%d business days</item>
+    </plurals>
+    <plurals name="dates_weekend_days">
+        <item quantity="one">%d weekend day</item>
+        <item quantity="other">%d weekend days</item>
+    </plurals>
+    <plurals name="tip_people_count">
+        <item quantity="one">%d person</item>
+        <item quantity="other">%d people</item>
+    </plurals>
 </resources>

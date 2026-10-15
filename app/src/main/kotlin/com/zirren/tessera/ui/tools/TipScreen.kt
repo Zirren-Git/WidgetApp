@@ -35,6 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -103,6 +104,7 @@ fun TipScreen(navigator: Navigator) {
 @Composable
 private fun BillTabContent() {
     val context = LocalContext.current
+    val resources = LocalResources.current
     val haptic = LocalHapticFeedback.current
     val locale = remember { Texts.forContext(context, context.graph.settings).dateTime.locale }
     val numberStyle = remember(locale) { NumberStyle.of(locale) }
@@ -260,7 +262,7 @@ private fun BillTabContent() {
                 }
 
                 Text(
-                    text = if (people == 1) stringResource(R.string.tip_person_single) else stringResource(R.string.tip_people_count, people),
+                    text = resources.getQuantityString(R.plurals.tip_people_count, people, people),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colorScheme.onSurface,
