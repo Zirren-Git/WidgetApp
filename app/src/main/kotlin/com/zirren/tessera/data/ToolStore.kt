@@ -18,7 +18,12 @@ class ToolStore(context: Context) {
         get() = prefs.getString(KEY_CALCULATOR, null)
         set(value) = prefs.edit().putString(KEY_CALCULATOR, value).apply()
 
+    var counter: String?
+        get() = prefs.getString(KEY_COUNTER, null)
+        set(value) = prefs.edit().putString(KEY_COUNTER, value).apply()
+
     private companion object {
         const val KEY_CALCULATOR = "tools.calculator.state"
+        const val KEY_COUNTER = "tools.counter.state"
     }
 }

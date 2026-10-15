@@ -397,4 +397,13 @@
     <string name="coin_tails">Tails</string>
     <string name="coin_stats">Heads: %1$d · Tails: %2$d (%3$d total)</string>
     <string name="coin_ready">Tap Flip to toss</string>
+
+    <!-- Tally Counter -->
+    <string name="tool_counter">Tally Counter</string>
+    <string name="tool_counter_summary">Tap to count with custom step sizes and haptic feedback.</string>
+    <string name="counter_step_label">Step size</string>
+    <string name="counter_action_reset">Reset count</string>
+    <string name="counter_action_decrement">Subtract</string>
+    <string name="counter_action_increment">Add</string>
+    <string name="counter_target_reached">Target reached!</string>
 </resources>

@@ -30,6 +30,7 @@ object WidgetIntents {
     const val SCREEN_DATES = "dates"
     const val SCREEN_TIP = "tip"
     const val SCREEN_DICE = "dice"
+    const val SCREEN_COUNTER = "counter"
 
     /** tessera://open/<screen>: what a widget tap opens, and what a tool's home-screen shortcut opens. */
     fun screenIntent(context: Context, screen: String): Intent =
