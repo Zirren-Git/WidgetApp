@@ -333,4 +333,26 @@
     <string name="stopwatch_split_header">Split</string>
     <string name="stopwatch_total_header">Total</string>
     <string name="stopwatch_no_laps">Tap Lap while running to record split times.</string>
+
+    <!-- Days between dates -->
+    <string name="tool_dates">Days between dates</string>
+    <string name="tool_dates_summary">Count days, weeks and business days between any two dates.</string>
+    <string name="dates_start_label">Start date</string>
+    <string name="dates_end_label">End date</string>
+    <string name="dates_today">Today</string>
+    <string name="dates_swap">Swap dates</string>
+    <string name="dates_result_today">Same day</string>
+    <string name="dates_result_days">%d days</string>
+    <string name="dates_result_days_left">%d days left</string>
+    <string name="dates_result_days_ago">%d days ago</string>
+    <string name="dates_weeks_days">%1$d weeks, %2$d days</string>
+    <string name="dates_business_days">%d business days</string>
+    <string name="dates_weekend_days">%d weekend days</string>
+    <string name="dates_breakdown">Breakdown</string>
+    <string name="dates_quick_presets">Quick offsets</string>
+    <string name="dates_preset_end_month">End of month</string>
+    <string name="dates_preset_end_year">End of year</string>
+    <string name="dates_preset_30d">+30 days</string>
+    <string name="dates_preset_100d">+100 days</string>
+    <string name="dates_select_date">Select date</string>
 </resources>
