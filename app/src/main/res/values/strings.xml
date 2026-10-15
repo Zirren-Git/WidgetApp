@@ -309,4 +309,28 @@
     <string name="unit_ft2">Square feet</string>
     <string name="unit_ac">Acres</string>
     <string name="unit_mi2">Square miles</string>
+
+    <!-- Timer & Stopwatch -->
+    <string name="tool_timer">Timer &amp; Stopwatch</string>
+    <string name="tool_timer_summary">Countdowns with presets, plus a stopwatch with lap splits.</string>
+    <string name="timer_tab_timer">Timer</string>
+    <string name="timer_tab_stopwatch">Stopwatch</string>
+    <string name="timer_start">Start</string>
+    <string name="timer_pause">Pause</string>
+    <string name="timer_resume">Resume</string>
+    <string name="timer_reset">Reset</string>
+    <string name="timer_add_minute">+1 min</string>
+    <string name="timer_finished">Time's up</string>
+    <string name="timer_presets">Presets</string>
+    <string name="timer_preset_1m">1 min</string>
+    <string name="timer_preset_3m">3 min</string>
+    <string name="timer_preset_5m">5 min</string>
+    <string name="timer_preset_10m">10 min</string>
+    <string name="timer_preset_15m">15 min</string>
+    <string name="timer_preset_25m">25 min</string>
+    <string name="stopwatch_lap">Lap</string>
+    <string name="stopwatch_lap_header">Lap</string>
+    <string name="stopwatch_split_header">Split</string>
+    <string name="stopwatch_total_header">Total</string>
+    <string name="stopwatch_no_laps">Tap Lap while running to record split times.</string>
 </resources>
