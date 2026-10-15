@@ -34,7 +34,7 @@ jobs:
       - uses: gradle/actions/setup-gradle@v6
 
       - name: Core unit tests
-        run: ./gradlew :core:model:test :core:weather:test :core:calendar:test
+        run: ./gradlew :core:model:test :core:weather:test :core:calendar:test :core:tools:test
 
       - name: Build APK
         env:

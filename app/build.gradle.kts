@@ -64,6 +64,7 @@ dependencies {
     implementation(project(":core:model"))
     implementation(project(":core:weather"))
     implementation(project(":core:calendar"))
+    implementation(project(":core:tools"))
 
     implementation(libs.kotlinx.coroutines.android)
 

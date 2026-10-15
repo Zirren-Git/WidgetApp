@@ -212,4 +212,35 @@
         <item>W</item>
         <item>NW</item>
     </string-array>
+
+    <!-- Tools -->
+    <string name="home_section_tools">Tools</string>
+    <string name="home_tools_summary">Offline helpers: calculator, unit converter, timer and more</string>
+    <string name="tools_title">Tools</string>
+    <string name="tools_eyebrow">Offline utilities</string>
+    <string name="tools_intro">Small, dependable helpers that work completely offline. Pin any tool to your home screen or jump in from here.</string>
+    <string name="tools_open">Open</string>
+    <string name="tools_section_more">More tools</string>
+    <string name="tools_footer">Offline · No permissions</string>
+    <string name="tools_footer_detail">Tools need no internet, no accounts and no background services.</string>
+    <string name="tools_pin_unsupported">Your launcher can't pin shortcuts directly. Long-press Tessera's app icon to find it.</string>
+
+    <!-- Calculator -->
+    <string name="tool_calculator">Calculator</string>
+    <string name="tool_calculator_summary">Keypad with large numbers, percentages and decimal arithmetic.</string>
+    <string name="calc_copied">Copied to clipboard</string>
+    <string name="calc_copy_cd">Copy displayed number</string>
+    <string name="calc_error_divide_by_zero">Can't divide by zero</string>
+    <string name="calc_error_too_large">Number is too large</string>
+    <string name="calc_cd_digit">%d</string>
+    <string name="calc_cd_clear">Clear</string>
+    <string name="calc_cd_sign">Change sign</string>
+    <string name="calc_cd_percent">Percent</string>
+    <string name="calc_cd_divide">Divide</string>
+    <string name="calc_cd_multiply">Multiply</string>
+    <string name="calc_cd_subtract">Subtract</string>
+    <string name="calc_cd_add">Add</string>
+    <string name="calc_cd_equals">Equals</string>
+    <string name="calc_cd_decimal">Decimal point</string>
+    <string name="calc_cd_backspace">Backspace</string>
 </resources>

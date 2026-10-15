@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tessera icon. Generated from one definition so the preview and the drawable stay identical. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:pathData="M7 3H17A1.5 1.5 0 0 1 18.5 4.5V19.5A1.5 1.5 0 0 1 17 21H7A1.5 1.5 0 0 1 5.5 19.5V4.5A1.5 1.5 0 0 1 7 3Z"
+        android:strokeColor="@color/icon_ink"
+        android:strokeWidth="1.6"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+    <path
+        android:pathData="M8.75 6.5H15.25V9.5H8.75Z"
+        android:strokeColor="@color/icon_ink"
+        android:strokeWidth="1.6"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+    <path
+        android:pathData="M9 13H9M12 13H12M15 13H15M9 16.5H9M12 16.5H12M15 16.5H15"
+        android:strokeColor="@color/icon_ink"
+        android:strokeWidth="2.1"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+</vector>

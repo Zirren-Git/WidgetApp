@@ -19,6 +19,10 @@ import com.zirren.tessera.core.weather.RefreshTrigger
 import com.zirren.tessera.data.Settings
 import com.zirren.tessera.graph
 import com.zirren.tessera.ui.theme.TesseraTheme
+import com.zirren.tessera.ui.tools.Tool
+import com.zirren.tessera.ui.tools.ToolScreen
+import com.zirren.tessera.ui.tools.ToolShortcuts
+import com.zirren.tessera.ui.tools.ToolsScreen
 import com.zirren.tessera.widget.WidgetIntents
 import com.zirren.tessera.widget.WidgetUpdater
 
@@ -30,6 +34,9 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         if (savedInstanceState == null) navigator.open(screenFor(intent))
         setContent { TesseraRoot(navigator) }
+        // Long-press menu on the app icon, and labels of pinned tool icons in the phone's current language.
+        val app = applicationContext
+        app.graph.io.execute { ToolShortcuts.publish(app) }
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -48,13 +55,14 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    /** Widget taps open tessera://open/<screen>. */
-    private fun screenFor(intent: Intent?): Screen? = when (intent?.data?.lastPathSegment) {
+    /** Widget taps and tool shortcuts open tessera://open/<screen>. */
+    private fun screenFor(intent: Intent?): Screen? = when (val segment = intent?.data?.lastPathSegment) {
         WidgetIntents.SCREEN_FORECAST -> Screen.Forecast
         WidgetIntents.SCREEN_WEATHER -> Screen.Weather
         WidgetIntents.SCREEN_CALENDAR -> Screen.Calendar
         WidgetIntents.SCREEN_HOME -> Screen.Home
-        else -> null
+        WidgetIntents.SCREEN_TOOLS -> Screen.Tools
+        else -> Tool.fromSegment(segment)?.let { Screen.ToolPage(it) }
     }
 }
 
@@ -65,6 +73,8 @@ sealed interface Screen {
     data object Calendar : Screen
     data object Forecast : Screen
     data object Health : Screen
+    data object Tools : Screen
+    data class ToolPage(val tool: Tool) : Screen
 }
 
 /** Tiny back stack; Tessera has a handful of screens and no deep hierarchies. */
@@ -82,10 +92,12 @@ class Navigator {
         return true
     }
 
+    /** Opens [screen] from outside (a widget or shortcut), so Back leads through its parents to Home. */
     fun open(screen: Screen?) {
         if (screen == null) return
         stack.clear()
         stack.add(Screen.Home)
+        if (screen is Screen.ToolPage) stack.add(Screen.Tools)
         if (screen != Screen.Home) stack.add(screen)
     }
 }
@@ -97,13 +109,15 @@ fun TesseraRoot(navigator: Navigator) {
     val useWallpaperColors = remember(version) { settings.useWallpaperColors }
     TesseraTheme(useWallpaperColors = useWallpaperColors) {
         BackHandler(enabled = navigator.stack.size > 1) { navigator.pop() }
-        when (navigator.current) {
+        when (val screen = navigator.current) {
             Screen.Home -> HomeScreen(navigator, version)
             Screen.Weather -> WeatherScreen(navigator, version)
             Screen.PlaceSearch -> PlaceSearchScreen(navigator)
             Screen.Calendar -> CalendarScreen(navigator, version)
             Screen.Forecast -> ForecastScreen(navigator, version)
             Screen.Health -> HealthScreen(navigator, version)
+            Screen.Tools -> ToolsScreen(navigator)
+            is Screen.ToolPage -> ToolScreen(navigator, screen.tool)
         }
     }
 }

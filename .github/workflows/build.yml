@@ -22,9 +22,9 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@v6
 
-      # Plain-Kotlin modules (weather, calendar, model): fast, no Android needed.
+      # Plain-Kotlin modules (model, weather, calendar, tools): fast, no Android needed.
       - name: Core unit tests
-        run: ./gradlew :core:model:test :core:weather:test :core:calendar:test
+        run: ./gradlew :core:model:test :core:weather:test :core:calendar:test :core:tools:test
 
       - name: Lint and debug APK
         run: ./gradlew :app:lintDebug :app:assembleDebug

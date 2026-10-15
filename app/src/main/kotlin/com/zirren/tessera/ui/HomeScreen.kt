@@ -135,6 +135,16 @@ fun HomeScreen(navigator: Navigator, version: Int) {
             )
         }
 
+        item { Section(stringResource(R.string.home_section_tools)) }
+        item {
+            NavRow(
+                icon = R.drawable.ic_tools,
+                title = stringResource(R.string.tools_title),
+                value = stringResource(R.string.home_tools_summary),
+                onClick = { navigator.push(Screen.Tools) },
+            )
+        }
+
         if (Build.VERSION.SDK_INT >= 31) {
             item { Section(stringResource(R.string.home_section_appearance)) }
             item {

@@ -9,6 +9,7 @@ import com.zirren.tessera.core.weather.UrlConnectionTransport
 import com.zirren.tessera.data.CalendarRepository
 import com.zirren.tessera.data.DeviceLocation
 import com.zirren.tessera.data.Settings
+import com.zirren.tessera.data.ToolStore
 import com.zirren.tessera.data.WeatherRepository
 import com.zirren.tessera.data.WeatherStore
 import java.util.concurrent.ExecutorService
@@ -16,6 +17,7 @@ import java.util.concurrent.Executors
 
 class AppGraph(app: Application) {
     val settings = Settings(app)
+    val tools = ToolStore(app)
 
     /** Background work for receivers, jobs and widget rendering. Two threads is plenty. */
     val io: ExecutorService = Executors.newFixedThreadPool(2) { runnable ->

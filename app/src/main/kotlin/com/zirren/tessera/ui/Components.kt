@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -51,9 +52,15 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.zirren.tessera.R
 
-/** Page shell: back arrow, a micro-label, a display title, then scrolling content. */
+/** Page shell: back arrow (and an optional action at the right), a micro-label, a display title, then scrolling content. */
 @Composable
-fun Page(title: String, onBack: (() -> Unit)?, eyebrow: String? = null, content: LazyListScope.() -> Unit) {
+fun Page(
+    title: String,
+    onBack: (() -> Unit)?,
+    eyebrow: String? = null,
+    action: (@Composable () -> Unit)? = null,
+    content: LazyListScope.() -> Unit,
+) {
     val insets = WindowInsets.safeDrawing.asPaddingValues()
     LazyColumn(
         modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background),
@@ -65,9 +72,15 @@ fun Page(title: String, onBack: (() -> Unit)?, eyebrow: String? = null, content:
         ),
     ) {
         item {
-            if (onBack != null) {
-                IconButton(onClick = onBack, modifier = Modifier.offset(x = (-12).dp)) {
-                    Icon(painterResource(R.drawable.ic_arrow_back), contentDescription = stringResource(R.string.action_back))
+            if (onBack != null || action != null) {
+                Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                    if (onBack != null) {
+                        IconButton(onClick = onBack, modifier = Modifier.offset(x = (-12).dp)) {
+                            Icon(painterResource(R.drawable.ic_arrow_back), contentDescription = stringResource(R.string.action_back))
+                        }
+                    }
+                    Spacer(Modifier.weight(1f))
+                    action?.invoke()
                 }
             }
             if (eyebrow != null) Label(eyebrow, Modifier.padding(top = if (onBack == null) 16.dp else 4.dp))

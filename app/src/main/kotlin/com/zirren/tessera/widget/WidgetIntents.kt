@@ -23,14 +23,18 @@ object WidgetIntents {
     const val SCREEN_FORECAST = "forecast"
     const val SCREEN_WEATHER = "weather"
     const val SCREEN_CALENDAR = "calendar"
+    const val SCREEN_TOOLS = "tools"
+    const val SCREEN_CALCULATOR = "calculator"
 
-    fun openScreen(context: Context, screen: String): PendingIntent {
-        val intent = Intent(context, MainActivity::class.java)
+    /** tessera://open/<screen>: what a widget tap opens, and what a tool's home-screen shortcut opens. */
+    fun screenIntent(context: Context, screen: String): Intent =
+        Intent(context, MainActivity::class.java)
             .setAction(Intent.ACTION_VIEW)
             .setData(Uri.parse("tessera://open/$screen"))
             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
-        return PendingIntent.getActivity(context, screen.hashCode(), intent, FLAGS)
-    }
+
+    fun openScreen(context: Context, screen: String): PendingIntent =
+        PendingIntent.getActivity(context, screen.hashCode(), screenIntent(context, screen), FLAGS)
 
     fun showAlarms(context: Context): PendingIntent {
         val intent = Intent(AlarmClock.ACTION_SHOW_ALARMS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
