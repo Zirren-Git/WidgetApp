@@ -96,14 +96,13 @@ object TodayWidget {
         val text = model.texts.weather
         when {
             !model.weatherConfigured -> {
-                views.setViewVisibility(R.id.weather_icon, View.GONE)
                 views.setViewVisibility(R.id.weather_temp, View.GONE)
                 views.setTextViewText(R.id.weather_line, context.getString(R.string.widget_set_place))
                 views.setOnClickPendingIntent(R.id.weather_block, WidgetIntents.openScreen(context, WidgetIntents.SCREEN_WEATHER))
             }
             snapshot == null || current == null -> {
-                views.setViewVisibility(R.id.weather_icon, View.GONE)
                 views.setViewVisibility(R.id.weather_temp, View.VISIBLE)
+                views.setTextViewCompoundDrawablesRelative(R.id.weather_temp, 0, 0, 0, 0)
                 views.setTextViewText(R.id.weather_temp, "\u2013")
                 views.setTextViewText(R.id.weather_line, context.getString(R.string.widget_weather_loading))
                 views.setOnClickPendingIntent(R.id.weather_block, WidgetIntents.refreshWeather(context))
@@ -111,9 +110,9 @@ object TodayWidget {
             else -> {
                 val temperature = text.temperature(current.temperature)
                 val line = weatherLine(snapshot, model, size)
-                views.setViewVisibility(R.id.weather_icon, View.VISIBLE)
                 views.setViewVisibility(R.id.weather_temp, View.VISIBLE)
-                views.setImageViewResource(R.id.weather_icon, WeatherIcons.drawable(current.symbol?.icon))
+                // The icon is the temperature's compound drawable: one view instead of two.
+                views.setTextViewCompoundDrawablesRelative(R.id.weather_temp, WeatherIcons.drawable(current.symbol?.icon), 0, 0, 0)
                 views.setTextViewText(R.id.weather_temp, temperature)
                 views.setTextViewText(R.id.weather_line, line)
                 views.setContentDescription(

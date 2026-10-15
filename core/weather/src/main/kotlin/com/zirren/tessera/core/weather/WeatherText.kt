@@ -7,12 +7,12 @@ import java.time.ZoneId
 import java.util.Locale
 import kotlin.math.roundToInt
 
-/** The words used for weather. English defaults; Android can build this from string resources. */
-data class WeatherPhrases(
-    val dryForHours: String = "Dry for the next %d hours",
+/** The words used for weather. English defaults; Android builds these from string and plural resources. */
+class WeatherPhrases(
+    val dryForHours: (hours: Int) -> String = { "Dry for the next $it hours" },
     val startsAt: String = "%1\$s from %2\$s",
     val until: String = "%1\$s until %2\$s",
-    val forHours: String = "%1\$s for the next %2\$d hours",
+    val forHours: (type: String, hours: Int) -> String = { type, hours -> "$type for the next $hours hours" },
     val rain: String = "Rain",
     val sleet: String = "Sleet",
     val snow: String = "Snow",
@@ -64,11 +64,11 @@ class WeatherText(
     }
 
     fun outlook(outlook: PrecipitationOutlook): String = when (outlook) {
-        is PrecipitationOutlook.DryFor -> phrases.dryForHours.format(outlook.hours)
+        is PrecipitationOutlook.DryFor -> phrases.dryForHours(outlook.hours)
         is PrecipitationOutlook.StartsAt -> phrases.startsAt.format(typeWord(outlook.type), clock(outlook.time))
         is PrecipitationOutlook.Ongoing ->
             if (outlook.until != null) phrases.until.format(typeWord(outlook.type), clock(outlook.until))
-            else phrases.forHours.format(typeWord(outlook.type), outlook.horizonHours)
+            else phrases.forHours(typeWord(outlook.type), outlook.horizonHours)
     }
 
     private fun typeWord(type: PrecipitationType) = when (type) {

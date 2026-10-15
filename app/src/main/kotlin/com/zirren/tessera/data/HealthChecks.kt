@@ -6,7 +6,6 @@ import android.os.Build
 import android.os.PowerManager
 import com.zirren.tessera.R
 import com.zirren.tessera.core.model.Age
-import com.zirren.tessera.core.model.AgePhrases
 import com.zirren.tessera.core.weather.Freshness
 import com.zirren.tessera.graph
 import com.zirren.tessera.widget.AgendaWidgetProvider
@@ -46,12 +45,7 @@ object HealthChecks {
         if (place == null) {
             checks += Check(false, weatherTitle, context.getString(R.string.health_weather_no_place), Fix.SET_PLACE)
         } else {
-            val ages = AgePhrases(
-                justNow = context.getString(R.string.age_just_now),
-                minutesAgo = context.getString(R.string.age_minutes),
-                hoursAgo = context.getString(R.string.age_hours),
-                daysAgo = context.getString(R.string.age_days),
-            )
+            val ages = Texts.agePhrases(context)
             val fetchedAt = settings.refreshState.lastSuccessAt?.takeIf { settings.refreshState.pointKey == place.point.rounded(4).key() }
             val error = settings.lastWeatherError?.let { " " + context.getString(R.string.health_last_error, it) }.orEmpty()
             checks += when {

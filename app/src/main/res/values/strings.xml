@@ -2,7 +2,6 @@
 <resources>
     <string name="action_back">Back</string>
     <string name="action_open_settings">Open app settings</string>
-    <string name="age_days">%d days ago</string>
     <string name="age_hours">%d h ago</string>
     <string name="age_just_now">just now</string>
     <string name="age_minutes">%d min ago</string>
@@ -10,7 +9,6 @@
     <string name="agenda_busy">Busy</string>
     <string name="agenda_day_of_span">Day %1$d of %2$d</string>
     <string name="agenda_in_minutes">in %d min</string>
-    <string name="agenda_nothing_ahead">Nothing in the next %d days</string>
     <string name="agenda_nothing_today">Nothing else today</string>
     <string name="agenda_nothing_tomorrow">Nothing tomorrow</string>
     <string name="agenda_now">Now</string>
@@ -128,10 +126,8 @@
     <string name="search_title">Find a place</string>
     <string name="units_auto">Auto (%s)</string>
     <string name="weather_attribution">Weather data from MET Norway (CC BY 4.0): free and open, no API key. Place search from GeoNames via Open-Meteo.</string>
-    <string name="weather_dry_for">Dry for the next %d hours</string>
     <string name="weather_eyebrow">Data source</string>
     <string name="weather_feels_like">Feels like %s</string>
-    <string name="weather_for_hours">%1$s for the next %2$d hours</string>
     <string name="weather_high_low">H %1$s · L %2$s</string>
     <string name="weather_locating">Finding you…</string>
     <string name="weather_location_denied">Location wasn\'t allowed. Searching for a town works just as well.</string>
@@ -173,6 +169,14 @@
     <string name="widget_updated_ago">Updated %s</string>
     <string name="widget_weather_loading">Getting weather…</string>
 
+    <plurals name="age_days">
+        <item quantity="one">%d day ago</item>
+        <item quantity="other">%d days ago</item>
+    </plurals>
+    <plurals name="agenda_nothing_ahead">
+        <item quantity="one">Nothing in the next %d day</item>
+        <item quantity="other">Nothing in the next %d days</item>
+    </plurals>
     <plurals name="calendar_days">
         <item quantity="one">%d day</item>
         <item quantity="other">%d days</item>
@@ -188,6 +192,14 @@
     <plurals name="home_placed">
         <item quantity="one">Live · %d on your home screen</item>
         <item quantity="other">Live · %d on your home screen</item>
+    </plurals>
+    <plurals name="weather_dry_for">
+        <item quantity="one">Dry for the next %d hour</item>
+        <item quantity="other">Dry for the next %d hours</item>
+    </plurals>
+    <plurals name="weather_for_hours">
+        <item quantity="one">%1$s for the next %2$d hour</item>
+        <item quantity="other">%1$s for the next %2$d hours</item>
     </plurals>
 
     <string-array name="compass_points">

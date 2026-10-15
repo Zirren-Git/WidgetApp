@@ -24,17 +24,20 @@ sealed interface Age {
     }
 }
 
-/** The words for [Age]. English defaults; Android can build this from string resources. */
-data class AgePhrases(
+/**
+ * The words for [Age]. English defaults; Android builds these from string and plural resources,
+ * which is why counts are functions: many languages change more than one word with the number.
+ */
+class AgePhrases(
     val justNow: String = "just now",
-    val minutesAgo: String = "%d min ago",
-    val hoursAgo: String = "%d h ago",
-    val daysAgo: String = "%d days ago",
+    val minutesAgo: (Int) -> String = { "$it min ago" },
+    val hoursAgo: (Int) -> String = { "$it h ago" },
+    val daysAgo: (Int) -> String = { "$it days ago" },
 ) {
     fun format(age: Age): String = when (age) {
         Age.JustNow -> justNow
-        is Age.Minutes -> minutesAgo.format(age.value)
-        is Age.Hours -> hoursAgo.format(age.value)
-        is Age.Days -> daysAgo.format(age.value)
+        is Age.Minutes -> minutesAgo(age.value)
+        is Age.Hours -> hoursAgo(age.value)
+        is Age.Days -> daysAgo(age.value)
     }
 }

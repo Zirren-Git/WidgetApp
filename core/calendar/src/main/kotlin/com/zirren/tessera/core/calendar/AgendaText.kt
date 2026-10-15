@@ -6,8 +6,8 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
 
-/** The words used for the agenda. English defaults; Android can build this from string resources. */
-data class AgendaPhrases(
+/** The words used for the agenda. English defaults; Android builds these from string and plural resources. */
+class AgendaPhrases(
     val today: String = "Today",
     val tomorrow: String = "Tomorrow",
     val allDay: String = "All day",
@@ -16,7 +16,7 @@ data class AgendaPhrases(
     val inMinutes: String = "in %d min",
     val dayOfSpan: String = "Day %1\$d of %2\$d",
     val nothingToday: String = "Nothing else today",
-    val nothingAhead: String = "Nothing in the next %d days",
+    val nothingAhead: (days: Int) -> String = { "Nothing in the next $it days" },
     val nothingTomorrow: String = "Nothing tomorrow",
 )
 
@@ -93,5 +93,5 @@ class AgendaText(
 
     /** Empty-state line, e.g. "Nothing else today" or "Nothing in the next 7 days". */
     fun emptyLine(agenda: Agenda): String =
-        if (agenda.isEmpty) phrases.nothingAhead.format(agenda.daysAhead) else phrases.nothingToday
+        if (agenda.isEmpty) phrases.nothingAhead(agenda.daysAhead) else phrases.nothingToday
 }

@@ -50,15 +50,11 @@ class AndroidDateTimeText(context: Context) : DateTimeText {
         format.format(Date.from(dateTime.atZone(zone).toInstant()))
 }
 
-/** Every widget word, built from string resources so Tessera can be translated. */
+/** Every widget word, built from string and plural resources so Tessera can be translated. */
 class Texts(context: Context, units: UnitPreferences) {
+    private val res = context.resources
     val dateTime = AndroidDateTimeText(context)
-    val age = AgePhrases(
-        justNow = context.getString(R.string.age_just_now),
-        minutesAgo = context.getString(R.string.age_minutes),
-        hoursAgo = context.getString(R.string.age_hours),
-        daysAgo = context.getString(R.string.age_days),
-    )
+    val age = agePhrases(context)
     val agenda = AgendaText(
         dateTime,
         AgendaPhrases(
@@ -70,7 +66,7 @@ class Texts(context: Context, units: UnitPreferences) {
             inMinutes = context.getString(R.string.agenda_in_minutes),
             dayOfSpan = context.getString(R.string.agenda_day_of_span),
             nothingToday = context.getString(R.string.agenda_nothing_today),
-            nothingAhead = context.getString(R.string.agenda_nothing_ahead),
+            nothingAhead = { days -> res.getQuantityString(R.plurals.agenda_nothing_ahead, days, days) },
             nothingTomorrow = context.getString(R.string.agenda_nothing_tomorrow),
         ),
     )
@@ -79,10 +75,10 @@ class Texts(context: Context, units: UnitPreferences) {
         dateTime,
         ZoneId.systemDefault(),
         WeatherPhrases(
-            dryForHours = context.getString(R.string.weather_dry_for),
+            dryForHours = { hours -> res.getQuantityString(R.plurals.weather_dry_for, hours, hours) },
             startsAt = context.getString(R.string.weather_starts_at),
             until = context.getString(R.string.weather_until),
-            forHours = context.getString(R.string.weather_for_hours),
+            forHours = { type, hours -> res.getQuantityString(R.plurals.weather_for_hours, hours, type, hours) },
             rain = context.getString(R.string.weather_rain),
             sleet = context.getString(R.string.weather_sleet),
             snow = context.getString(R.string.weather_snow),
@@ -96,6 +92,16 @@ class Texts(context: Context, units: UnitPreferences) {
     val untitledLabel: String = context.getString(R.string.agenda_untitled)
 
     companion object {
+        fun agePhrases(context: Context): AgePhrases {
+            val res = context.resources
+            return AgePhrases(
+                justNow = res.getString(R.string.age_just_now),
+                minutesAgo = { minutes -> res.getString(R.string.age_minutes, minutes) },
+                hoursAgo = { hours -> res.getString(R.string.age_hours, hours) },
+                daysAgo = { days -> res.getQuantityString(R.plurals.age_days, days, days) },
+            )
+        }
+
         /** The phone's region decides default units: a Swedish phone gets °C and m/s. */
         fun regionOf(context: Context): String? = context.resources.configuration.locales[0].country.takeIf { it.isNotBlank() }
 
