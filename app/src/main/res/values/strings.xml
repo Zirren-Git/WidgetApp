@@ -355,4 +355,29 @@
     <string name="dates_preset_30d">+30 days</string>
     <string name="dates_preset_100d">+100 days</string>
     <string name="dates_select_date">Select date</string>
+
+    <!-- Tip & Split -->
+    <string name="tool_tip">Tip &amp; Split</string>
+    <string name="tool_tip_summary">Calculate tip amounts, split bills, and compute percentages.</string>
+    <string name="tip_tab_bill">Tip &amp; Split</string>
+    <string name="tip_tab_percent">Percentages</string>
+    <string name="tip_bill_amount">Bill amount</string>
+    <string name="tip_percent_label">Tip percentage</string>
+    <string name="tip_split_label">Split between</string>
+    <string name="tip_people_count">%d people</string>
+    <string name="tip_person_single">1 person</string>
+    <string name="tip_round_up">Round up total</string>
+    <string name="tip_round_up_detail">Rounds total bill to nearest whole currency unit.</string>
+    <string name="tip_summary_per_person">Per person</string>
+    <string name="tip_summary_total">Total bill</string>
+    <string name="tip_summary_tip">Tip</string>
+    <string name="percent_calc_heading_of">Percentage of a value</string>
+    <string name="percent_calc_what_is">What is</string>
+    <string name="percent_calc_of">of</string>
+    <string name="percent_calc_heading_ratio">Value as a percentage</string>
+    <string name="percent_calc_is_what_percent_of">is what % of</string>
+    <string name="percent_calc_heading_change">Percentage change</string>
+    <string name="percent_calc_from">From</string>
+    <string name="percent_calc_to">to</string>
+    <string name="percent_result">Result: %s</string>
 </resources>

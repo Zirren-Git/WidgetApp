@@ -33,6 +33,10 @@ enum class Tool(
         WidgetIntents.SCREEN_DATES, R.string.tool_dates, R.string.tool_dates_summary,
         R.drawable.ic_dates, R.drawable.shortcut_dates, inAppIconMenu = false,
     ),
+    TIP(
+        WidgetIntents.SCREEN_TIP, R.string.tool_tip, R.string.tool_tip_summary,
+        R.drawable.ic_tip, R.drawable.shortcut_tip, inAppIconMenu = false,
+    ),
     ;
 
     val shortcutId: String get() = "tool.$segment"
@@ -50,5 +54,6 @@ fun ToolScreen(navigator: Navigator, tool: Tool) {
         Tool.CONVERTER -> ConverterScreen(navigator)
         Tool.TIMER -> TimerScreen(navigator)
         Tool.DATES -> DateCalcScreen(navigator)
+        Tool.TIP -> TipScreen(navigator)
     }
 }
