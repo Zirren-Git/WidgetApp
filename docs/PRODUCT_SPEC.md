@@ -307,6 +307,20 @@ Backup and restore to a file replaces sync.
 
 Planner widgets use the native tier (§7.1) and the same theme as the app (§9.4).
 
+### 4.10 Offline tools
+
+Small, focused utilities that run completely offline without accounts, analytics, ads or network permissions. Each tool is available from the in-app *Tools* screen and can be pinned to the home screen as a shortcut (`tessera://open/<tool>`) or launched from the app icon's long-press menu.
+
+| Tool | What it does | Status | Out-of-scope choices |
+|---|---|---|---|
+| Calculator | Decimal arithmetic (`+ − × ÷`), operator precedence, repeated equals, percentages, sign change, backspace, and division-by-zero protection. Tactile keypad with TalkBack labels. | **Built** | Live RemoteViews calculator widget is excluded because RemoteViews cannot receive keyboard text input; pinned shortcut opens the in-app tool directly. |
+| Unit converter | Length, mass, volume, temperature, speed and area conversions using exact factors and region-aware default pairs (e.g. US gets inches/cm, UK gets stone/kg, SE gets m/ft). | **Built** | Obscure or specialized engineering units outside daily consumer use. |
+| Timer & Stopwatch | Countdown timer with presets (1m, 3m, 5m, 10m, 15m, 25m) and +1m bump. Stopwatch with millisecond precision and lap splits table. | **Built** | No system alarms or background notifications; runs strictly within the app to avoid background battery drain and alarm permissions. |
+| Days between dates | Counts total calendar days, working business days (Mon–Fri), weekend days, and calendar breakdown (years, months, days) between any two dates. Quick offsets (+30d, +100d, month/year ends). | **Built** | Complex multi-calendar religious or astronomical holiday rules. |
+| Tip & Split | Calculates tip amounts, splits bills across N people, optional round-up to nearest currency unit. Includes percentage calculators (X% of Y, ratio, % change). | **Built** | Itemized receipt OCR or camera scanning (violates no-AI rule 5). |
+| Dice & Coin | Polyhedral dice roller (d4, d6, d8, d10, d12, d20, d100) with multi-dice rolls and modifiers. Coin flipper with running flip statistics. | **Built** | 3D physics simulation engine (unnecessary complexity and battery drain). |
+| Tally counter | Big-tap counter with custom step sizes (+1, +5, +10, +50, +100), goal/target alert, haptics and persistent state. | **Built** | Cloud sync or multi-user counter sharing. |
+
 ---
 
 ## 5. What's not in v1

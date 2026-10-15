@@ -16,6 +16,7 @@ Like KWGT, without the formulas, the layer tree or the guesswork about sizing.
 - **Up Next** widget: today and the coming days from the calendars on your phone, with calendar colours, a "now" marker, "Day 2 of 3" for trips, and **+** to add an event.
 - **Weather that just works:** MET Norway forecasts with no API key. Search for a city or use your location (rounded to about 1 km). Units follow your region, so a Swedish phone gets °C and m/s.
 - **Calendar without fuss:** choose which calendars to show, hide declined events, merge duplicates, or show "Busy" instead of titles.
+- **Offline tools:** small, dependable helpers that work completely offline with no permissions. Includes a decimal calculator with TalkBack keypad, unit converter (length, mass, volume, temperature, speed, area), timer with presets and lap stopwatch, days between dates calculator, tip & split calculator with percentage helpers, polyhedral dice & coin flip, and a tally counter. Each tool can be pinned to your home screen or opened via `tessera://open/<tool>`.
 - **Health check** that answers "why isn't my widget updating?" and offers one-tap fixes.
 - **Paper** (day) and **Darkroom** (night) themes, or your wallpaper's colours on Android 12+.
 
