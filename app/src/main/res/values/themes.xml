@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- The app draws its own UI in Compose; this theme only covers the window and the launch screen. -->
+    <style name="Theme.Tessera" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@color/tessera_canvas</item>
+        <item name="android:colorAccent">@color/tessera_accent</item>
+    </style>
+
+    <!-- Widget typography. Fonts are bundled, so launchers render them without a network. -->
+    <style name="WidgetText">
+        <item name="android:fontFamily">@font/instrument_sans_regular</item>
+        <item name="android:textColor">@color/tessera_ink</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <!-- Tracked-out uppercase micro-label: dates, day headers, "updated 3 h ago". -->
+    <style name="WidgetText.Label">
+        <item name="android:fontFamily">@font/ibm_plex_mono_medium</item>
+        <item name="android:textSize">11sp</item>
+        <item name="android:letterSpacing">0.08</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">@color/tessera_ink_muted</item>
+    </style>
+
+    <style name="WidgetText.Clock">
+        <item name="android:fontFamily">@font/fraunces_regular</item>
+        <item name="android:textSize">46sp</item>
+        <item name="android:letterSpacing">-0.02</item>
+        <item name="android:ellipsize">none</item>
+    </style>
+
+    <style name="WidgetText.Temperature">
+        <item name="android:fontFamily">@font/fraunces_semibold</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:ellipsize">none</item>
+    </style>
+
+    <style name="WidgetText.Body">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/tessera_ink_muted</item>
+    </style>
+
+    <style name="WidgetText.Title">
+        <item name="android:fontFamily">@font/instrument_sans_medium</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="WidgetText.Meta">
+        <item name="android:fontFamily">@font/ibm_plex_mono_medium</item>
+        <item name="android:textSize">11sp</item>
+        <item name="android:textColor">@color/tessera_ink_muted</item>
+    </style>
+
+    <style name="WidgetText.When">
+        <item name="android:fontFamily">@font/ibm_plex_mono_medium</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/tessera_accent</item>
+        <item name="android:ellipsize">none</item>
+    </style>
+</resources>

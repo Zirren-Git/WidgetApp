@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Paper (day). Contrast measured against WCAG 2.x; see docs/PRODUCT_SPEC.md §9. -->
+<resources>
+    <color name="tessera_canvas">#F3EEE4</color>
+    <color name="tessera_raised">#FAF7F1</color>
+    <color name="tessera_ink">#1C1A17</color>
+    <color name="tessera_ink_muted">#615B51</color>
+    <color name="tessera_hairline">#D9D0C0</color>
+    <color name="tessera_accent">#B03A12</color>
+    <color name="tessera_on_accent">#FFF8F0</color>
+
+    <!-- Widgets sit on wallpapers, so their surface is the warm paper itself. -->
+    <color name="widget_surface">#F3EEE4</color>
+
+    <!-- Sample calendar colour for the widget-picker preview only. -->
+    <color name="preview_calendar_green">#0B8043</color>
+
+    <color name="icon_ink">@color/tessera_ink</color>
+    <color name="icon_accent">@color/tessera_accent</color>
+</resources>

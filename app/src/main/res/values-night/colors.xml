@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Darkroom (night). The accent is a photographic safelight. -->
+<resources>
+    <color name="tessera_canvas">#11100E</color>
+    <color name="tessera_raised">#23201C</color>
+    <color name="tessera_ink">#EDE6D8</color>
+    <color name="tessera_ink_muted">#A39C8F</color>
+    <color name="tessera_hairline">#302C27</color>
+    <color name="tessera_accent">#F07445</color>
+    <color name="tessera_on_accent">#1A0D07</color>
+
+    <color name="widget_surface">#1A1815</color>
+</resources>
