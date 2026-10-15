@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Deliberate exceptions. Every other lint warning is fixed, not hidden. -->
+<lint>
+    <!-- targetSdk stays at 36 until Tessera has been tested on Android 17 (spec §12, M7). -->
+    <issue id="OldTargetApi" severity="informational" />
+
+    <!-- Android 12+ widget-picker attributes; older launchers ignore them, which is fine. -->
+    <issue id="UnusedAttribute">
+        <ignore path="src/main/res/xml/widget_agenda_info.xml" />
+        <ignore path="src/main/res/xml/widget_today_info.xml" />
+    </issue>
+
+    <!-- The data, sync and widget code uses only the Android platform (no AndroidX KTX),
+         so it can be compile-checked without AndroidX and never relies on transitive dependencies. -->
+    <issue id="UseKtx" severity="ignore" />
+
+    <!-- Gradle stays on AGP 9.4's tested version (9.6.1); upgrades are deliberate, not automatic. -->
+    <issue id="AndroidGradlePluginVersion" severity="informational" />
+</lint>

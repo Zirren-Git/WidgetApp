@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="action_back">Back</string>
+    <string name="action_open_settings">Open app settings</string>
+    <string name="age_hours">%d h ago</string>
+    <string name="age_just_now">just now</string>
+    <string name="age_minutes">%d min ago</string>
+    <string name="agenda_all_day">All day</string>
+    <string name="agenda_busy">Busy</string>
+    <string name="agenda_day_of_span">Day %1$d of %2$d</string>
+    <string name="agenda_in_minutes">in %d min</string>
+    <string name="agenda_nothing_today">Nothing else today</string>
+    <string name="agenda_nothing_tomorrow">Nothing tomorrow</string>
+    <string name="agenda_now">Now</string>
+    <string name="agenda_today">Today</string>
+    <string name="agenda_tomorrow">Tomorrow</string>
+    <string name="agenda_until">until %s</string>
+    <string name="agenda_untitled">(No title)</string>
+    <!-- Week-number part of a date pattern (ICU syntax): quoted letters are literal, w is the week number. Swedish: 'v.' w -->
+    <string name="agenda_week_pattern">\'W\'w</string>
+    <string name="app_name">Tessera</string>
+    <string name="appearance_wallpaper_colors">Use wallpaper colors</string>
+    <string name="appearance_wallpaper_colors_detail">Tessera\'s screens take on your wallpaper\'s palette (Material You). Fonts stay the same.</string>
+    <string name="calendar_all_day">All-day events</string>
+    <string name="calendar_allow">Allow calendar access</string>
+    <string name="calendar_connect_body">Tessera reads the calendars already on this phone (Google, Outlook, DAVx5, or local) to list your events on widgets. It only reads, and nothing leaves your phone.</string>
+    <string name="calendar_connect_title">Show your day on the home screen</string>
+    <string name="calendar_denied">Android didn\'t give access. If it doesn\'t ask again, turn on Calendar under Permissions in the app settings.</string>
+    <string name="calendar_eyebrow">Data source</string>
+    <string name="calendar_hide_declined">Hide events I\'ve declined</string>
+    <string name="calendar_merge">Merge duplicates</string>
+    <string name="calendar_merge_detail">When the same meeting is in two calendars, show it once.</string>
+    <string name="calendar_none_found">No calendars found on this phone. Add an account in your calendar app, then come back.</string>
+    <string name="calendar_privacy_note">Tessera never uploads your calendar. It only reads it, on this phone, when it redraws a widget.</string>
+    <string name="calendar_section_calendars">Calendars</string>
+    <string name="calendar_section_range">How far ahead</string>
+    <string name="calendar_section_show">Show</string>
+    <string name="calendar_show_titles">Show event titles</string>
+    <string name="calendar_show_titles_detail">Turn off to show “Busy” instead, handy when others can see your phone.</string>
+    <string name="calendar_title">Calendar</string>
+    <string name="fix_add_widget">Add Morning Paper</string>
+    <string name="fix_app_settings">Open app settings</string>
+    <string name="fix_calendar">Connect calendar</string>
+    <string name="fix_location">Fix location</string>
+    <string name="fix_refresh">Refresh now</string>
+    <string name="fix_set_place">Choose a place</string>
+    <string name="forecast_attribution">Weather data: MET Norway (CC BY 4.0)</string>
+    <string name="forecast_eyebrow">Weather</string>
+    <string name="forecast_humidity">Humidity %d%%</string>
+    <string name="forecast_loading">Fetching the forecast… It appears as soon as your phone is online.</string>
+    <string name="forecast_no_place">Choose a place first, and Tessera will fetch its forecast.</string>
+    <string name="forecast_polar_day">The sun doesn\'t set today.</string>
+    <string name="forecast_polar_night">The sun doesn\'t rise today.</string>
+    <string name="forecast_section_days">Coming days</string>
+    <string name="forecast_section_hours">Next 24 hours</string>
+    <string name="forecast_section_sun">Sun</string>
+    <string name="forecast_sun_times">Sunrise %1$s · Sunset %2$s</string>
+    <string name="forecast_title">Forecast</string>
+    <string name="forecast_updated">Updated %s</string>
+    <string name="forecast_uv">UV %d</string>
+    <string name="health_all_good">Everything works. Your widgets are up to date.</string>
+    <string name="health_background_ok">Allowed. Weather refreshes about once an hour.</string>
+    <string name="health_background_restricted">Android is blocking Tessera in the background, so weather and events can\'t update. Remove the restriction under Battery in the app settings.</string>
+    <string name="health_background_title">Background updates</string>
+    <string name="health_battery_exempt">Unrestricted. Tessera doesn\'t need it, but it does no harm.</string>
+    <string name="health_battery_normal">Optimized, and that\'s fine. Tessera uses Android\'s scheduler and never keeps itself running.</string>
+    <string name="health_battery_title">Battery</string>
+    <string name="health_calendar_off">Not connected (optional).</string>
+    <string name="health_calendar_ok">Connected. Events update a few seconds after they change.</string>
+    <string name="health_calendar_title">Calendar</string>
+    <string name="health_clocks_detail">Clocks and dates are drawn by your launcher, so they keep exact time even when Tessera isn\'t running.</string>
+    <string name="health_clocks_title">Clocks</string>
+    <string name="health_eyebrow">Why isn\'t my widget updating?</string>
+    <string name="health_last_error">Last problem: %s.</string>
+    <string name="health_location_detail">“Use my location” is on, but location access was turned off. Pick a city instead, or allow approximate location.</string>
+    <string name="health_location_title">Location</string>
+    <string name="health_needs_attention">Needs attention</string>
+    <string name="health_ok">OK</string>
+    <string name="health_title">Health check</string>
+    <string name="health_weather_fresh">%1$s, updated %2$s.</string>
+    <string name="health_weather_never">No forecast for %s yet. It loads as soon as the phone is online.</string>
+    <string name="health_weather_no_place">No place chosen, so widgets can\'t show weather.</string>
+    <string name="health_weather_old">Last updated %s.</string>
+    <string name="health_weather_title">Weather</string>
+    <string name="health_widgets_none">No Tessera widgets on your home screen yet.</string>
+    <string name="health_widgets_title">Widgets</string>
+    <string name="home_add_short">Add</string>
+    <string name="home_add_to_home_screen">Add to home screen</string>
+    <string name="home_calendar">Calendar</string>
+    <string name="home_calendar_next">%1$s · next: %2$s %3$s</string>
+    <string name="home_calendar_not_connected">Not connected. Tap to show your events.</string>
+    <string name="home_eyebrow">Widgets, made by you</string>
+    <string name="home_footer">Open source · MIT</string>
+    <string name="home_footer_detail">github.com/Zirren-Git/WidgetApp. No ads, no tracking, no AI.</string>
+    <string name="home_health">Health check</string>
+    <string name="home_health_ok">Everything works</string>
+    <string name="home_intro">Pick a widget, put it on your home screen, then choose what it shows. No formulas, no layers.</string>
+    <string name="home_not_placed">Not on your home screen</string>
+    <string name="home_pin_unsupported">Your launcher can\'t place widgets for apps. Long-press an empty spot on your home screen, tap Widgets, and find Tessera.</string>
+    <string name="home_section_appearance">Appearance</string>
+    <string name="home_section_sources">What widgets show</string>
+    <string name="home_section_widgets">Widgets</string>
+    <string name="home_weather">Weather</string>
+    <string name="home_weather_not_set">Choose a place to see weather</string>
+    <string name="home_weather_waiting">%s · waiting for the first forecast</string>
+    <string name="preview_agenda_empty">Nothing in the next 7 days</string>
+    <string name="preview_agenda_header">Thu 15 Oct · W42</string>
+    <string name="preview_condition">Partly cloudy</string>
+    <string name="preview_event2_meta">12:00–13:00 · Café Tösse</string>
+    <string name="preview_event2_title">Lunch with Sara</string>
+    <string name="preview_event_meta">10:30–10:45 · Room 3</string>
+    <string name="preview_event_title">Standup</string>
+    <string name="preview_event_when">10:30</string>
+    <!-- Widget-picker preview texts (preview_*) are sample data, shown before the widget is placed -->
+    <string name="preview_temperature">12°</string>
+    <string name="preview_weather_line">Light rain · H 14° L 8°</string>
+    <string name="refresh_failed">Couldn\'t refresh: %s.</string>
+    <string name="refresh_up_to_date">Already up to date. MET Norway hasn\'t published anything newer.</string>
+    <string name="refresh_updated">Updated just now.</string>
+    <string name="refresh_waiting">Not yet: %s.</string>
+    <string name="search_attribution">Places from GeoNames via Open-Meteo (CC BY 4.0)</string>
+    <string name="search_failed">Search didn\'t work: %s</string>
+    <string name="search_hint">Town or city, e.g. Trollhättan</string>
+    <string name="search_no_results">No places with that name. Try a nearby town.</string>
+    <string name="search_searching">Searching…</string>
+    <string name="search_title">Find a place</string>
+    <string name="units_auto">Auto (%s)</string>
+    <string name="weather_attribution">Weather data from MET Norway (CC BY 4.0): free and open, no API key. Place search from GeoNames via Open-Meteo.</string>
+    <string name="weather_eyebrow">Data source</string>
+    <string name="weather_feels_like">Feels like %s</string>
+    <string name="weather_high_low">H %1$s · L %2$s</string>
+    <string name="weather_locating">Finding you…</string>
+    <string name="weather_location_denied">Location wasn\'t allowed. Searching for a town works just as well.</string>
+    <string name="weather_location_failed">Couldn\'t get a location. Check that location is on, or search for your town instead.</string>
+    <string name="weather_mode_device">From your phone\'s location (about 1 km). Updates when you tap “Use my location” again.</string>
+    <string name="weather_mode_none">Choose a town, or let Tessera find you once.</string>
+    <string name="weather_mode_place">Picked from search. Stays put when you travel.</string>
+    <string name="weather_my_location">My location</string>
+    <string name="weather_no_place">No place chosen yet</string>
+    <string name="weather_privacy_note">Tessera rounds your location to about 1 km and sends only that to MET Norway. It never tracks you in the background.</string>
+    <string name="weather_rain">Rain</string>
+    <string name="weather_refresh_note">Tessera checks for new forecasts about once an hour and never asks MET Norway more often than it allows.</string>
+    <string name="weather_refresh_now">Refresh now</string>
+    <string name="weather_search_place">Search for a place</string>
+    <string name="weather_section_place">Place</string>
+    <string name="weather_section_refresh">Updates</string>
+    <string name="weather_section_sources">Sources</string>
+    <string name="weather_section_units">Units</string>
+    <string name="weather_sleet">Sleet</string>
+    <string name="weather_snow">Snow</string>
+    <string name="weather_starts_at">%1$s from %2$s</string>
+    <string name="weather_temperature">Temperature</string>
+    <string name="weather_title">Weather</string>
+    <string name="weather_until">%1$s until %2$s</string>
+    <string name="weather_use_my_location">Use my location</string>
+    <string name="weather_wind">Wind</string>
+    <string name="widget_agenda_description">Today and the coming days from your calendars.</string>
+    <string name="widget_agenda_empty">Nothing coming up</string>
+    <string name="widget_agenda_name">Up Next</string>
+    <string name="widget_agenda_permission">Tap to show your calendar here.</string>
+    <string name="widget_calendar_prompt">Add your calendar →</string>
+    <string name="widget_loading">Tessera</string>
+    <string name="widget_new_event">New event</string>
+    <string name="widget_now_badge">Now</string>
+    <string name="widget_offline_updated_ago">Offline · updated %s</string>
+    <string name="widget_set_place">Tap to choose a place</string>
+    <string name="widget_today_description">Date, a big clock, today\'s weather, and what\'s next on your calendar.</string>
+    <string name="widget_today_name">Morning Paper</string>
+    <string name="widget_updated_ago">Updated %s</string>
+    <string name="widget_weather_loading">Getting weather…</string>
+
+    <plurals name="age_days">
+        <item quantity="one">%d day ago</item>
+        <item quantity="other">%d days ago</item>
+    </plurals>
+    <plurals name="agenda_nothing_ahead">
+        <item quantity="one">Nothing in the next %d day</item>
+        <item quantity="other">Nothing in the next %d days</item>
+    </plurals>
+    <plurals name="calendar_days">
+        <item quantity="one">%d day</item>
+        <item quantity="other">%d days</item>
+    </plurals>
+    <plurals name="home_calendar_count">
+        <item quantity="one">%d calendar</item>
+        <item quantity="other">%d calendars</item>
+    </plurals>
+    <plurals name="home_health_issues">
+        <item quantity="one">%d thing needs attention</item>
+        <item quantity="other">%d things need attention</item>
+    </plurals>
+    <plurals name="home_placed">
+        <item quantity="one">Live · %d on your home screen</item>
+        <item quantity="other">Live · %d on your home screen</item>
+    </plurals>
+    <plurals name="weather_dry_for">
+        <item quantity="one">Dry for the next %d hour</item>
+        <item quantity="other">Dry for the next %d hours</item>
+    </plurals>
+    <plurals name="weather_for_hours">
+        <item quantity="one">%1$s for the next %2$d hour</item>
+        <item quantity="other">%1$s for the next %2$d hours</item>
+    </plurals>
+
+    <string-array name="compass_points">
+        <item>N</item>
+        <item>NE</item>
+        <item>E</item>
+        <item>SE</item>
+        <item>S</item>
+        <item>SW</item>
+        <item>W</item>
+        <item>NW</item>
+    </string-array>
+</resources>
