@@ -223,14 +223,14 @@
     <string name="tools_section_more">More tools</string>
     <string name="tools_footer">Offline · No permissions</string>
     <string name="tools_footer_detail">Tools need no internet, no accounts and no background services.</string>
-    <string name="tools_pin_unsupported">Your launcher can't pin shortcuts directly. Long-press Tessera's app icon to find it.</string>
+    <string name="tools_pin_unsupported">Your launcher can\'t pin shortcuts directly. Long-press Tessera\'s app icon to find it.</string>
 
     <!-- Calculator -->
     <string name="tool_calculator">Calculator</string>
     <string name="tool_calculator_summary">Keypad with large numbers, percentages and decimal arithmetic.</string>
     <string name="calc_copied">Copied to clipboard</string>
     <string name="calc_copy_cd">Copy displayed number</string>
-    <string name="calc_error_divide_by_zero">Can't divide by zero</string>
+    <string name="calc_error_divide_by_zero">Can\'t divide by zero</string>
     <string name="calc_error_too_large">Number is too large</string>
     <string name="calc_cd_digit">%d</string>
     <string name="calc_cd_clear">Clear</string>
@@ -320,7 +320,7 @@
     <string name="timer_resume">Resume</string>
     <string name="timer_reset">Reset</string>
     <string name="timer_add_minute">+1 min</string>
-    <string name="timer_finished">Time's up</string>
+    <string name="timer_finished">Time\'s up</string>
     <string name="timer_presets">Presets</string>
     <string name="timer_preset_1m">1 min</string>
     <string name="timer_preset_3m">3 min</string>
