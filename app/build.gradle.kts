@@ -17,8 +17,8 @@ android {
         minSdk = 26
         // Raise to 37 after testing on Android 17; Compose 1.12 only needs compileSdk 37.
         targetSdk = 36
-        versionCode = 1
-        versionName = "0.1.0"
+        versionCode = 2
+        versionName = "0.2.0"
     }
 
     signingConfigs {
