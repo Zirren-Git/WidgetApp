@@ -243,4 +243,70 @@
     <string name="calc_cd_equals">Equals</string>
     <string name="calc_cd_decimal">Decimal point</string>
     <string name="calc_cd_backspace">Backspace</string>
+
+    <!-- Unit Converter -->
+    <string name="tool_converter">Unit converter</string>
+    <string name="tool_converter_summary">Length, mass, volume, temperature, speed and area.</string>
+    <string name="converter_from">From</string>
+    <string name="converter_to">To</string>
+    <string name="converter_swap">Swap units</string>
+    <string name="converter_select_unit">Select unit</string>
+
+    <string name="converter_cat_length">Length</string>
+    <string name="converter_cat_mass">Mass</string>
+    <string name="converter_cat_volume">Volume</string>
+    <string name="converter_cat_temperature">Temperature</string>
+    <string name="converter_cat_speed">Speed</string>
+    <string name="converter_cat_area">Area</string>
+
+    <!-- Length units -->
+    <string name="unit_mm">Millimeters</string>
+    <string name="unit_cm">Centimeters</string>
+    <string name="unit_m">Meters</string>
+    <string name="unit_km">Kilometers</string>
+    <string name="unit_in">Inches</string>
+    <string name="unit_ft">Feet</string>
+    <string name="unit_yd">Yards</string>
+    <string name="unit_mi">Miles</string>
+
+    <!-- Mass units -->
+    <string name="unit_mg">Milligrams</string>
+    <string name="unit_g">Grams</string>
+    <string name="unit_kg">Kilograms</string>
+    <string name="unit_t">Metric tonnes</string>
+    <string name="unit_oz">Ounces</string>
+    <string name="unit_lb">Pounds</string>
+    <string name="unit_st">Stones</string>
+
+    <!-- Volume units -->
+    <string name="unit_ml">Milliliters</string>
+    <string name="unit_l">Liters</string>
+    <string name="unit_m3">Cubic meters</string>
+    <string name="unit_fl_oz">US fluid ounces</string>
+    <string name="unit_cup">US cups</string>
+    <string name="unit_pt">US pints</string>
+    <string name="unit_gal">US gallons</string>
+    <string name="unit_imp_pt">Imperial pints</string>
+    <string name="unit_imp_gal">Imperial gallons</string>
+
+    <!-- Temperature units -->
+    <string name="unit_celsius">Celsius</string>
+    <string name="unit_fahrenheit">Fahrenheit</string>
+    <string name="unit_kelvin">Kelvin</string>
+
+    <!-- Speed units -->
+    <string name="unit_mps">Meters per second</string>
+    <string name="unit_kmh">Kilometers per hour</string>
+    <string name="unit_mph">Miles per hour</string>
+    <string name="unit_kn">Knots</string>
+
+    <!-- Area units -->
+    <string name="unit_cm2">Square centimeters</string>
+    <string name="unit_m2">Square meters</string>
+    <string name="unit_ha">Hectares</string>
+    <string name="unit_km2">Square kilometers</string>
+    <string name="unit_in2">Square inches</string>
+    <string name="unit_ft2">Square feet</string>
+    <string name="unit_ac">Acres</string>
+    <string name="unit_mi2">Square miles</string>
 </resources>

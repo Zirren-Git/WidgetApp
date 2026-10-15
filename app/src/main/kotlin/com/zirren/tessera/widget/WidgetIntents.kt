@@ -25,6 +25,7 @@ object WidgetIntents {
     const val SCREEN_CALENDAR = "calendar"
     const val SCREEN_TOOLS = "tools"
     const val SCREEN_CALCULATOR = "calculator"
+    const val SCREEN_CONVERTER = "converter"
 
     /** tessera://open/<screen>: what a widget tap opens, and what a tool's home-screen shortcut opens. */
     fun screenIntent(context: Context, screen: String): Intent =

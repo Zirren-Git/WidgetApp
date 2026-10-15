@@ -21,6 +21,10 @@ enum class Tool(
         WidgetIntents.SCREEN_CALCULATOR, R.string.tool_calculator, R.string.tool_calculator_summary,
         R.drawable.ic_calculator, R.drawable.shortcut_calculator, inAppIconMenu = true,
     ),
+    CONVERTER(
+        WidgetIntents.SCREEN_CONVERTER, R.string.tool_converter, R.string.tool_converter_summary,
+        R.drawable.ic_converter, R.drawable.shortcut_converter, inAppIconMenu = true,
+    ),
     ;
 
     val shortcutId: String get() = "tool.$segment"
@@ -35,5 +39,6 @@ enum class Tool(
 fun ToolScreen(navigator: Navigator, tool: Tool) {
     when (tool) {
         Tool.CALCULATOR -> CalculatorScreen(navigator)
+        Tool.CONVERTER -> ConverterScreen(navigator)
     }
 }
