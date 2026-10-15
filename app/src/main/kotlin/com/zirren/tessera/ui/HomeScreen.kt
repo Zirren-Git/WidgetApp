@@ -3,6 +3,7 @@ package com.zirren.tessera.ui
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Context
+import android.content.res.Resources
 import android.os.Build
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -31,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -64,6 +66,7 @@ private class HomeData(
 @Composable
 fun HomeScreen(navigator: Navigator, version: Int) {
     val context = LocalContext.current
+    val resources = LocalResources.current
     val graph = context.graph
     val data by produceState<HomeData?>(initialValue = null, version) {
         value = withContext(Dispatchers.IO) {
@@ -106,7 +109,7 @@ fun HomeScreen(navigator: Navigator, version: Int) {
             NavRow(
                 icon = R.drawable.ic_location,
                 title = stringResource(R.string.home_weather),
-                value = weatherSummary(context, data?.model, weather),
+                value = weatherSummary(resources, data?.model, weather, graph.settings.activePlace()?.label),
                 onClick = { navigator.push(Screen.Weather) },
             )
         }
@@ -115,7 +118,7 @@ fun HomeScreen(navigator: Navigator, version: Int) {
             NavRow(
                 icon = R.drawable.ic_calendar,
                 title = stringResource(R.string.home_calendar),
-                value = calendarSummary(context, data),
+                value = calendarSummary(resources, data),
                 onClick = { navigator.push(Screen.Calendar) },
             )
         }
@@ -126,7 +129,7 @@ fun HomeScreen(navigator: Navigator, version: Int) {
                 icon = if (issues == 0) R.drawable.ic_check else R.drawable.ic_alert,
                 title = stringResource(R.string.home_health),
                 value = if (issues == 0) stringResource(R.string.home_health_ok)
-                else context.resources.getQuantityString(R.plurals.home_health_issues, issues, issues),
+                else resources.getQuantityString(R.plurals.home_health_issues, issues, issues),
                 onClick = { navigator.push(Screen.Health) },
                 iconTint = if (issues == 0) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.primary,
             )
@@ -188,11 +191,11 @@ private fun CompactWidgetCard(name: String, description: String, placed: Int, on
 
 @Composable
 private fun PlacedLabel(placed: Int) {
-    val context = LocalContext.current
+    val resources = LocalResources.current
     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         LiveDot(live = placed > 0)
         Label(
-            if (placed > 0) context.resources.getQuantityString(R.plurals.home_placed, placed, placed)
+            if (placed > 0) resources.getQuantityString(R.plurals.home_placed, placed, placed)
             else stringResource(R.string.home_not_placed),
             color = if (placed > 0) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
         )
@@ -251,23 +254,23 @@ private fun MorningPaperMiniature(model: WidgetModel?) {
     }
 }
 
-private fun weatherSummary(context: Context, model: WidgetModel?, weather: WeatherSnapshot?): String {
+private fun weatherSummary(resources: Resources, model: WidgetModel?, weather: WeatherSnapshot?, placeLabel: String?): String {
     if (model == null) return ""
-    if (!model.weatherConfigured) return context.getString(R.string.home_weather_not_set)
-    val waiting = context.getString(R.string.home_weather_waiting, context.graph.settings.activePlace()?.label.orEmpty())
+    if (!model.weatherConfigured) return resources.getString(R.string.home_weather_not_set)
+    val waiting = resources.getString(R.string.home_weather_waiting, placeLabel.orEmpty())
     if (weather == null) return waiting
     val current = weather.report.current ?: return waiting
     val texts: Texts = model.texts
     return listOfNotNull(weather.place.label, texts.weather.temperature(current.temperature), current.symbol?.label).joinToString(" · ")
 }
 
-private fun calendarSummary(context: Context, data: HomeData?): String {
+private fun calendarSummary(resources: Resources, data: HomeData?): String {
     if (data == null) return ""
     val model = data.model ?: return ""
-    if (!model.calendarAllowed) return context.getString(R.string.home_calendar_not_connected)
-    val calendars = context.resources.getQuantityString(R.plurals.home_calendar_count, data.calendarCount, data.calendarCount)
+    if (!model.calendarAllowed) return resources.getString(R.string.home_calendar_not_connected)
+    val calendars = resources.getQuantityString(R.plurals.home_calendar_count, data.calendarCount, data.calendarCount)
     val next = model.agenda?.nextUp ?: return calendars
-    return context.getString(R.string.home_calendar_next, calendars, model.texts.agenda.whenLabel(next, model.now, model.zone), next.title)
+    return resources.getString(R.string.home_calendar_next, calendars, model.texts.agenda.whenLabel(next, model.now, model.zone), next.title)
 }
 
 /** Android 8+ can ask the launcher to place a widget directly: no hunting through the widget list. */

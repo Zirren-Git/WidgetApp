@@ -2,6 +2,7 @@ package com.zirren.tessera.ui
 
 import android.Manifest
 import android.content.Context
+import android.content.res.Resources
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
@@ -29,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -53,9 +55,11 @@ import kotlinx.coroutines.withContext
 @Composable
 fun WeatherScreen(navigator: Navigator, version: Int) {
     val context = LocalContext.current
+    val resources = LocalResources.current
     val graph = context.graph
     val settings = graph.settings
     val scope = rememberCoroutineScope()
+    val myLocationName = stringResource(R.string.weather_my_location)
     var busy by remember { mutableStateOf(false) }
     var message by remember { mutableStateOf<String?>(null) }
     val place = remember(version) { settings.activePlace() }
@@ -66,9 +70,9 @@ fun WeatherScreen(navigator: Navigator, version: Int) {
         busy = true
         message = null
         scope.launch {
-            val found = withContext(Dispatchers.IO) { locateAndSave(context) }
+            val found = withContext(Dispatchers.IO) { locateAndSave(context, myLocationName) }
             busy = false
-            message = if (found) null else context.getString(R.string.weather_location_failed)
+            message = if (found) null else resources.getString(R.string.weather_location_failed)
         }
     }
 
@@ -76,7 +80,7 @@ fun WeatherScreen(navigator: Navigator, version: Int) {
         if (granted) {
             useMyLocation()
         } else {
-            message = context.getString(R.string.weather_location_denied)
+            message = resources.getString(R.string.weather_location_denied)
         }
     }
 
@@ -154,7 +158,7 @@ fun WeatherScreen(navigator: Navigator, version: Int) {
                     {
                         scope.launch {
                             val result = withContext(Dispatchers.IO) { graph.weather.refresh(RefreshTrigger.USER) }
-                            refreshNote = describe(context, result)
+                            refreshNote = describe(resources, result)
                             WidgetUpdater.requestUpdate(context)
                         }
                     },
@@ -173,6 +177,7 @@ fun WeatherScreen(navigator: Navigator, version: Int) {
 @Composable
 fun PlaceSearchScreen(navigator: Navigator) {
     val context = LocalContext.current
+    val resources = LocalResources.current
     val graph = context.graph
     val scope = rememberCoroutineScope()
     var query by rememberSaveable { mutableStateOf("") }
@@ -186,14 +191,14 @@ fun PlaceSearchScreen(navigator: Navigator) {
             return@LaunchedEffect
         }
         delay(350) // wait until typing pauses; a new keystroke cancels this effect
-        status = context.getString(R.string.search_searching)
+        status = resources.getString(R.string.search_searching)
         val language = Texts.forContext(context, graph.settings).dateTime.locale.language
         when (val outcome = withContext(Dispatchers.IO) { graph.placeSearch.search(query, language) }) {
             is PlaceSearchOutcome.Found -> {
                 results = outcome.places
-                status = if (outcome.places.isEmpty()) context.getString(R.string.search_no_results) else null
+                status = if (outcome.places.isEmpty()) resources.getString(R.string.search_no_results) else null
             }
-            is PlaceSearchOutcome.Failed -> status = context.getString(R.string.search_failed, outcome.message)
+            is PlaceSearchOutcome.Failed -> status = resources.getString(R.string.search_failed, outcome.message)
         }
     }
 
@@ -239,11 +244,11 @@ fun PlaceSearchScreen(navigator: Navigator) {
 }
 
 /** Finds the phone, names the town, stores it rounded to ~1 km, and fetches weather. */
-private fun locateAndSave(context: Context): Boolean {
+private fun locateAndSave(context: Context, fallbackName: String): Boolean {
     val graph = context.graph
     val point = graph.location.locate() ?: return false
     val locale = Texts.forContext(context, graph.settings).dateTime.locale
-    val name = graph.location.placeName(point, locale) ?: context.getString(R.string.weather_my_location)
+    val name = graph.location.placeName(point, locale) ?: fallbackName
     graph.settings.devicePlace = Place(name = name, point = point)
     graph.settings.locationMode = Settings.LocationMode.DEVICE
     graph.weather.refresh(RefreshTrigger.LOCATION_CHANGED)
@@ -252,10 +257,10 @@ private fun locateAndSave(context: Context): Boolean {
     return true
 }
 
-private fun describe(context: Context, result: WeatherRepository.Result): String = when (result) {
-    WeatherRepository.Result.Updated -> context.getString(R.string.refresh_updated)
-    is WeatherRepository.Result.UpToDate -> context.getString(R.string.refresh_up_to_date)
-    is WeatherRepository.Result.Waiting -> context.getString(R.string.refresh_waiting, result.reason)
-    WeatherRepository.Result.NoPlace -> context.getString(R.string.weather_no_place)
-    is WeatherRepository.Result.Failed -> context.getString(R.string.refresh_failed, result.message)
+private fun describe(resources: Resources, result: WeatherRepository.Result): String = when (result) {
+    WeatherRepository.Result.Updated -> resources.getString(R.string.refresh_updated)
+    is WeatherRepository.Result.UpToDate -> resources.getString(R.string.refresh_up_to_date)
+    is WeatherRepository.Result.Waiting -> resources.getString(R.string.refresh_waiting, result.reason)
+    WeatherRepository.Result.NoPlace -> resources.getString(R.string.weather_no_place)
+    is WeatherRepository.Result.Failed -> resources.getString(R.string.refresh_failed, result.message)
 }

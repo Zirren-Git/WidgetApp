@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
@@ -46,6 +47,7 @@ import kotlinx.coroutines.withContext
 @Composable
 fun CalendarScreen(navigator: Navigator, version: Int) {
     val context = LocalContext.current
+    val resources = LocalResources.current
     val graph = context.graph
     val settings = graph.settings
     var granted by remember { mutableStateOf(graph.calendar.hasPermission()) }
@@ -159,7 +161,7 @@ fun CalendarScreen(navigator: Navigator, version: Int) {
         item {
             val days = remember(version) { settings.daysAhead }
             Choices(
-                options = listOf(1, 3, 7, 14).map { it to context.resources.getQuantityString(R.plurals.calendar_days, it, it) },
+                options = listOf(1, 3, 7, 14).map { it to resources.getQuantityString(R.plurals.calendar_days, it, it) },
                 selected = days,
                 onSelect = { settings.daysAhead = it; changed() },
             )

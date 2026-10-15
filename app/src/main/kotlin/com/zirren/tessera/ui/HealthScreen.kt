@@ -19,6 +19,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -38,6 +39,7 @@ import kotlinx.coroutines.withContext
 @Composable
 fun HealthScreen(navigator: Navigator, version: Int) {
     val context = LocalContext.current
+    val resources = LocalResources.current
     val scope = rememberCoroutineScope()
     val checks by produceState(initialValue = emptyList<Check>(), version) {
         value = withContext(Dispatchers.IO) { HealthChecks.run(context) }
@@ -64,7 +66,7 @@ fun HealthScreen(navigator: Navigator, version: Int) {
         item {
             Body(
                 if (problems == 0) stringResource(R.string.health_all_good)
-                else context.resources.getQuantityString(R.plurals.home_health_issues, problems, problems),
+                else resources.getQuantityString(R.plurals.home_health_issues, problems, problems),
                 Modifier.padding(bottom = 12.dp),
                 color = if (problems == 0) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.primary,
             )

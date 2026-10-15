@@ -37,6 +37,12 @@ android {
     buildFeatures {
         compose = true
     }
+
+    lint {
+        // Print the full report into the build log (CI shows it without downloading artifacts).
+        textReport = true
+        textOutput = file("stdout")
+    }
 }
 
 dependencies {
