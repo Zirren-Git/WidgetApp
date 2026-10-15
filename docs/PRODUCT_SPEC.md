@@ -3,8 +3,8 @@
 > A home-screen widget maker for Android that a complete beginner can use in two minutes.
 > Open source · any Android 8+ phone · no AI · no accounts · no ads.
 
-**Status:** discovery done (2026-10-15) · **Next:** Milestone 0
-The 13 answers in §1 are the owner's decisions. Everything else is the engineering recommendation that follows from them, and can be changed.
+**Status:** building (2026-10-15). Project skeleton, weather and calendar data, and the first two widgets are in the repo; see §12.
+The 14 decisions in §1 are the owner's. Everything else is the engineering recommendation that follows from them, and can be changed.
 
 **Contents**
 1. [Decisions so far](#1-decisions-so-far)
@@ -25,7 +25,7 @@ The 13 answers in §1 are the owner's decisions. Everything else is the engineer
 
 ## 1. Decisions so far
 
-Three rounds of questions, 15 Oct 2026.
+Three rounds of questions plus one follow-up request, 15 Oct 2026.
 
 | # | Question | Answer | What it means for the build |
 |---|---|---|---|
@@ -42,6 +42,7 @@ Three rounds of questions, 15 Oct 2026.
 | 11 | Money | **"No paid features or donation page. Fully open source and only on GitHub."** | MIT license (already in the repo). No billing code and no donation links. APKs on GitHub Releases only: no Play Store, no F-Droid. See §11 on Google's developer verification. |
 | 12 | Editor look | **"Paper by day, darkroom by night and an option to switch to Material You"** | Two hand-tuned palettes that follow system dark mode, plus a "Use wallpaper colors" switch (Android 12+). |
 | 13 | Name | **Tessera** | App label "Tessera", package `com.zirren.tessera`. Effectively permanent once people install it, because updates need the same package name and signing key. |
+| 14 | Follow-up request | **"Add the possibility for the widgets to fetch weather data and calendar (and other QoL features)"** | Calendar moves into v1 (it was a v1.1 candidate). Weather is specified in detail (§4.1, §7.3). New §4.8 lists the quality-of-life features. Both data sources are built first, ahead of the editor (§12). |
 
 ---
 
@@ -62,7 +63,7 @@ Complete beginners: someone who saw a beautiful home screen online, installed KW
 3. **Clocks are never wrong.** Anything that ticks is drawn by the launcher itself, so it doesn't depend on our app staying alive.
 4. **Any Android phone.** Android 8.0+, any brand, no Google Play services. If a library needs them, we don't use it.
 5. **Made by people, not generated.** No AI features or AI APIs. Templates are designed by people.
-6. **Nothing phones home.** No accounts, analytics, ads or crash-reporting SDKs. The network is used only for weather and an opt-in update check. *(This is an inference from answers 8 and 11. Confirm if you want it stricter or looser.)*
+6. **Nothing phones home.** No accounts, analytics, ads or crash-reporting SDKs. The network is used only for weather, city search (when you type), and an opt-in update check. *(This is an inference from answers 8 and 11. Confirm if you want it stricter or looser.)*
 7. **Beautiful untouched.** Every template and default looks finished before the user changes anything.
 
 ---
@@ -77,7 +78,8 @@ Complete beginners: someone who saw a beautiful home screen online, installed KW
 | Clock (analog) | Dial + hands | none | Android 12+: native `AnalogClock` with custom dial and hands. Android 8–11: native with bundled dial styles; fully custom dials use the minute-refresh fallback (§7.4) |
 | Date | Weekday, day, month, year | none | Native `TextClock` with a date pattern |
 | Battery | Level, charging state, ring or bar | none | System battery broadcasts, on change |
-| Weather | Now, high/low, condition, icon, place | Location optional; city search works without it | Every 60 min via WorkManager. MET Norway data, no API key |
+| Weather | Now, feels like, high/low, condition, icon, wind, humidity, UV, "Rain from 14:00", next hours, coming days, sunrise/sunset, place | Location optional; city search works without it | Hourly, network-only background job; never before MET's `Expires`. MET Norway data, no API key |
+| Calendar | Next event ("10:30 Standup", "Now · until 11:00"), agenda for today and the coming days | Calendar (read-only), asked when you add it | A few seconds after any calendar change (content-change trigger), plus at each event's start and end |
 | Photo | One photo or a slideshow | none (system photo picker) | The slideshow flips natively (`ViewFlipper`), so the app never wakes |
 | Countdown | "62 days until Midsummer" | none | Daily at midnight. Under 24 h, a native `Chronometer` counts down |
 | Quote | Quote of the day + author: a bundled public-domain set plus your own | none | Daily |
@@ -97,6 +99,7 @@ Chips are tappable tokens inside text. Formats are chosen by tapping a preview o
 | Battery | level % · charging state · time to full (Android 9+) |
 | Weather | temperature · feels like · high · low · condition · chance of rain · wind · place |
 | Countdown | days left · event name · event date · "in 3 days / today / 2 days ago" |
+| Calendar | next event title · next event time · "in 25 min" · events today · day of a multi-day event ("Day 2 of 3") |
 | Quote | text · author |
 | To-do | items left · next item |
 | Habit | streak · done today |
@@ -105,7 +108,7 @@ Chips are tappable tokens inside text. Formats are chosen by tapping a preview o
 
 A rule is **When** (one or more conditions, combined with *all of* or *any of*, one level deep) and **Then** (one or more effects).
 
-- **When:** battery below/above X% · charging / not charging · time between A and B · weekday / weekend · weather is rain / snow / clear / cloudy · temperature below/above X · countdown day arrives · all to-dos done · habit not done by HH:MM
+- **When:** battery below/above X% · charging / not charging · time between A and B · weekday / weekend · weather is rain / snow / clear / cloudy · temperature below/above X · rain expected within N hours · an event is on now · next event within N minutes · no more events today · countdown day arrives · all to-dos done · habit not done by HH:MM
 - **Then:** change color · change text · show/hide a block · swap photo or icon · switch to the theme's light/dark variant
 - **"Try it" simulator** in the editor: slide "Pretend battery is 15%" or "Pretend it's 22:00" and watch the rule fire. KWGT has nothing like this, and it's how beginners learn what a rule does.
 
@@ -117,6 +120,7 @@ A rule is **When** (one or more conditions, combined with *all of* or *any of*, 
 |---|---|
 | Clock | Opens the system alarms |
 | Date | Opens the calendar app at today |
+| Calendar event | Opens that event in the calendar app; "+" on the agenda creates a new event |
 | Battery | Opens battery settings |
 | Weather | Opens Tessera's forecast sheet (works on phones with no weather app) |
 | Photo | Shows the next photo (slideshow) or opens it in the gallery |
@@ -164,6 +168,53 @@ Starter set at launch, each rendered live in the gallery with the user's real ti
   - Anything else goes on a **"Needs your attention"** list that shows the original formula. The element keeps its last value as static text. Example result: "Imported 14 of 16 elements. 2 need your attention."
   - Many KWGT presets come from paid packs. Import is for personal use, and exporting an imported widget shows a reminder about the original creator's rights.
 
+### 4.8 Quality-of-life features
+
+Beginners judge an app by what happens when something goes slightly wrong, so these are part of v1. **Built** means it's in the code now; the rest is planned.
+
+**Weather**
+
+| Feature | Why it matters | Status |
+|---|---|---|
+| Works with no API key or account (MET Norway) | KWGT users have to choose a weather provider and paste in keys | Built |
+| City search *or* "Use my location", and location is optional | Weather without granting location access | Built |
+| Location rounded to ~1 km before it's stored or sent | Privacy by default | Built |
+| Units follow the phone's region (Sweden: °C and m/s; US: °F, mph, inches; UK: °C, mph), with manual override | Correct without touching settings | Built |
+| Offline-safe: last forecast cached; the hour shown keeps advancing from the cache | Widgets never go blank on a train | Built |
+| Freshness note only when it matters ("Updated 5 h ago", "Offline · updated 20 h ago"); tap it to refresh | Honest without clutter | Built |
+| "Rain from 14:00" / "Snow until 16:00" / "Dry for the next 12 hours" | The one thing people check the weather for | Built |
+| Feels-like temperature (wind chill / heat index) | Nordic winters | Built |
+| Sunrise and sunset computed on the phone, including midnight sun and polar night | No extra API | Built |
+| Polite refreshing: never before `Expires`, revalidates with `If-Modified-Since`, backs off after errors | Stays within MET's terms; saves battery and data | Built |
+| Weather alerts | Needs per-country sources | Later |
+
+**Calendar**
+
+| Feature | Why it matters | Status |
+|---|---|---|
+| Asks for access only when you open the calendar screen, with a plain explanation | No permission wall on first run | Built |
+| Choose which calendars to show (holidays, a shared family calendar…) | Less noise | Built |
+| Hide declined events; merge the same meeting found in two calendars | Agendas stay readable | Built |
+| All-day events stay on the right date in every time zone | A classic Android calendar-widget bug (stored at UTC midnight) | Built |
+| Multi-day events: "Day 2 of 3" | Trips and conferences | Built |
+| Privacy mode: "Busy" instead of titles | When others can see your phone | Built |
+| Tap an event to open it; "+" to add one | Widgets as shortcuts | Built |
+| "Nothing else today" plus a peek at what's next | Calm empty states | Built |
+| Week numbers that follow the region (ISO weeks in Sweden) | Swedes plan in weeks ("v. 42") | Built |
+
+**General**
+
+| Feature | Why it matters | Status |
+|---|---|---|
+| Health check: "Why isn't my widget updating?" with one-tap fixes | KWGT's most common complaint, answered in plain language | Built |
+| Clocks drawn by the launcher (TextClock), so they never freeze | No keep-alive service, no battery cost | Built |
+| Add to home screen from the app (no hunting in the widget list) | The hardest step for beginners | Built |
+| Widgets switch instantly between small/medium/large while resizing (Android 12+) | No scale settings, ever | Built |
+| Day/night widget colours follow the phone automatically | Matches the system without settings | Built |
+| Undo and version history in the editor | Fearless editing | Planned (M1) |
+| Contrast warning when text is hard to read on your wallpaper | Beginners don't know WCAG | Planned (M4) |
+| Backup and restore of all widgets to one file | New phone, same home screen | Planned (M5) |
+
 ---
 
 ## 5. What's not in v1
@@ -174,7 +225,7 @@ Starter set at launch, each rendered live in the gallery with the user's real ti
 | Paid features, donation page | Decision 11. Never. |
 | Google Play, F-Droid | Decision 11: GitHub only. |
 | Accounts, cloud sync, community gallery | Needs servers and moderation; file/QR sharing covers sharing. |
-| Calendar, now-playing music, step count | Not picked for v1. Candidates for v1.1 (each needs a sensitive permission). |
+| Now-playing music, step count | Not picked for v1. Candidates for v1.1 (each needs a sensitive permission). Calendar moved into v1 with decision 14. |
 | Web/RSS feeds, Tasker, system stats, notification counts | Power-user features that would confuse beginners. Maybe later. |
 | Lock-screen widgets | v1.1 candidate (recent Pixel phones support them). |
 | iOS | Decision 1. |
@@ -229,14 +280,15 @@ Example: in **Polaroid**, the photo with rounded mask and grain is an image laye
 
 | Content | Mechanism | Wake-ups from Tessera |
 |---|---|---|
-| Time, date, short countdowns | Native views | 0 |
+| Time, date, short countdowns | Native views (`TextClock`, `Chronometer`) | 0 |
 | Slideshow | Native `ViewFlipper` | 0 |
 | Battery | System broadcast, on change | only on change |
-| Weather | WorkManager, every 60 min | 24/day |
-| Countdown days, quote, habit day rollover | Scheduled after midnight | 1/day |
-| Rules with time windows ("22:00–06:00") | Inexact alarms with a bounded window (no exact-alarm permission) | per boundary |
+| Weather | Periodic JobScheduler job, hourly, network only; never before MET's `Expires` | ≤ 24/day |
+| Calendar | Content-change trigger on the calendar provider (fires seconds after an edit) | per change |
+| Event starts/ends, top of the hour, midnight | One-off "boundary" job at the next moment the widget would look different | per boundary |
+| Rules with time windows ("22:00–06:00") | The same boundary job | per boundary |
 
-The default path has **no permanent foreground service**.
+Everything runs through **JobScheduler**: no permanent foreground service and no exact-alarm permission. Jobs re-arm after reboot and app updates. The widget's own `updatePeriodMillis` (hourly) is only a safety net.
 
 ### 7.4 The fallback: minute refresh
 
@@ -339,6 +391,22 @@ All three typefaces are SIL OFL and bundled; their licenses appear under Setting
 
 ### 10.1 Modules
 
+**Today** (built):
+
+```
+:core:model           places, units and regional defaults, date/time text, ages           (plain Kotlin)
+:core:weather         MET Norway client + parser, symbols, feels-like, sun, outlook,
+                      refresh policy, report builder, city search                          (plain Kotlin)
+:core:calendar        agenda engine (filters, all-day handling, grouping), labels,
+                      next-change timing                                                   (plain Kotlin)
+:app                  Android: data (settings, cache, calendar, location), sync (jobs),
+                      widget (providers + RemoteViews), ui (Compose screens)
+```
+
+The packages inside `:app` (`data`, `sync`, `widget`, `ui`) will become the modules below as they grow.
+
+**Target:**
+
 ```
 :app                  editor UI, navigation, settings
 :core:format          .tessera document model + JSON + migrations      (plain Kotlin)
@@ -361,17 +429,19 @@ The three modules marked *plain Kotlin* have no Android dependencies on purpose,
 | Concern | Choice | Why |
 |---|---|---|
 | Language / UI | Kotlin 2.x, Jetpack Compose, Material 3 with custom color schemes | Modern, fast to iterate |
-| Native widget tier | Hand-built RemoteViews | Full control over `TextClock`, `AnalogClock`, `Chronometer`, `ViewFlipper` and size-mapped layouts, some of which Glance doesn't expose |
+| Native widget tier | Hand-built RemoteViews (built) | Full control over `TextClock`, `AnalogClock`, `Chronometer`, `ViewFlipper` and size-mapped layouts, some of which Glance doesn't expose |
 | Animated tier | Glance 1.3 alpha + `androidx.compose.remote` alpha | The only route to animated widgets; kept isolated |
 | Documents | kotlinx.serialization; one folder per widget in app storage | Same file as export |
 | To-dos, habits, countdowns | Room | Streak queries |
-| Settings | DataStore | Standard |
-| Background | WorkManager, AlarmManager (bounded inexact), broadcast receivers | No exact-alarm permission, no permanent service |
-| Weather | MET Norway Locationforecast 2.0 (free, no key, attribution shown in-app); city search via Open-Meteo Geocoding (free for non-commercial use) | "Just works" without the KWGT provider/API-key setup |
+| Settings | SharedPreferences (built) | Synchronous reads inside widget callbacks; a dozen keys don't need DataStore |
+| Background | JobScheduler (built) | No dependency, no exact-alarm permission, no permanent service. Content-change triggers watch the calendar directly; WorkManager would only wrap the same API |
+| Weather | MET Norway Locationforecast 2.0 `complete` (built): free, no key, attribution shown in-app. City search via Open-Meteo Geocoding (free for non-commercial use) | "Just works" without the KWGT provider/API-key setup |
+| JSON | kotlinx.serialization JSON tree API | No compiler plugin needed; tolerant of fields MET adds later |
+| HTTP | `HttpURLConnection` | Works on Android and the JVM, so the weather client is testable without a device |
 | Location | Platform `LocationManager`, coarse, optional | No Google Play services |
 | Photos | System photo picker, falling back to the document picker | No storage permission; works without Google services |
 | QR | ZXing + CameraX | ML Kit would need Google Play services |
-| Build | Gradle Kotlin DSL + version catalog; minSdk 26; compile/target the latest stable SDK; Java 17 toolchain | |
+| Build | Gradle 9.6.1, AGP 9.4.1 (built-in Kotlin), Kotlin 2.4.21, Compose BOM 2026.09.00; minSdk 26, compileSdk 37, targetSdk 36; Java 17 bytecode | Versions checked against Google Maven / Maven Central on 2026-10-15 |
 | Tests | JVM unit tests (core, planner), Roborazzi screenshot tests of every template, instrumented widget tests on API 26 / 31 / 34 / 36 | |
 
 **Implementation note.** RemoteViews can only inflate layouts that already exist in the APK, and a TextView's font can't be changed remotely. So `:render:native` assembles each widget from small generic XML "cells" (frame, row, column, image, clock…). A Gradle task generates one text cell and one clock cell per bundled font.
@@ -396,7 +466,11 @@ The three modules marked *plain Kotlin* have no Android dependencies on purpose,
 
 ## 12. Milestones
 
-Each milestone ends with an APK you can install.
+Each milestone ends with an APK you can install. Decision 14 pulled weather and calendar forward, so the first build is a data-first slice: **M0 + the weather and calendar parts of M2**.
+
+**Done in the first slice:** Gradle project and CI · plain-Kotlin core with 87 unit tests · MET Norway weather with caching and polite refresh · city search and "Use my location" · calendar agenda engine · JobScheduler sync · two native widgets ("Morning Paper" in 3 sizes, "Up Next") · app screens: Home, Weather, Calendar, Forecast, Health check · Paper/Darkroom/Material You themes · bundled fonts and hand-drawn icons.
+
+**Still open in M0:** the `.tessera` file format and migrations.
 
 | # | Milestone | Done when |
 |---|---|---|
@@ -429,9 +503,21 @@ Each milestone ends with an APK you can install.
 
 1. **Developer verification:** register (recommended) or rely on the advanced flow? Needed before the first public release.
 2. **Languages at launch:** English only, or English + Swedish? Strings are translation-ready either way.
-3. **v1.1:** add calendar, now-playing and steps, or keep permissions minimal?
+3. **v1.1:** add now-playing music and steps, or keep permissions minimal? (Calendar is decided: it's in v1.)
 4. **Lock-screen widgets** in v1.1?
 
 ### 13.3 What can be verified where
 
-This sandbox has no Android SDK, and Google's Maven and Gradle servers are unreachable from it. So Android code can't be compiled here, and every milestone has to be built in Android Studio. The plain-Kotlin modules (`:core:format`, `:core:logic`, `:render:planner`) are designed to be compile-checked and unit-tested outside Android; setting that up here is a first task for M0.
+This sandbox can't run Gradle (Google's Maven and Gradle servers are unreachable), so the first full build happens in Android Studio. Short of that, everything that can be checked here was checked:
+
+| Check | Result |
+|---|---|
+| `:core:*` unit tests (JUnit 4 sources, run with a stand-in harness) | 87/87 pass; deliberately broken code makes the right tests fail |
+| `:core:*` compiled against **Android 8.0's** `android.jar` with no JDK | Passes: no Java API newer than minSdk 26 |
+| Android framework code (data, sync, widgets) compiled against `android-37.jar` with an `R` class generated from the real resources | Passes, no warnings |
+| Same code against Android 8.0 | Only four newer APIs show up, each behind an `SDK_INT` check |
+| Resource references, RemoteViews-allowed views, string formats, style parents | Pass |
+| **Compose UI** (`ui/`) | **Not compiled here** (needs AndroidX). Written against stable APIs; Android Studio is the first real check |
+| Real devices and launchers | Not yet: M7's device matrix |
+
+Known gaps: weather condition labels ("Light rain") are English-only for now (the symbol's `labelKey` is the hook for translations). Widget fonts in third-party launchers still need on-device testing (§13.1).
